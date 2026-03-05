@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Client;
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
@@ -25,7 +25,20 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        $client = Client::create($request->validated());
+        $user = User::Create([
+            'name' => $request->name,
+            'lastname' => $request->lastname,
+            'email' => $request->email,
+            'password' => bcrypt('12345678'), // Contraseña por defecto, se recomienda cambiarla
+        ]);
+        $client = Client::create([
+            'user_id' => $user->id,
+            'phone' => $request->phone,
+            'inscription_date' => $request->inscription_date,
+            'expiration_date' => $request->expiration_date,
+            'is_active' => $request->is_active ?? true,
+            'medical_notes' => $request->medical_notes,
+        ]);
 
         return (new ClientResource($client))
         ->additional(['message' => 'Cliente creado exitosamente!'])
