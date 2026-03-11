@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import Layout from "@/components/ui/Layout";
+import Layout from "@/components/Layout/Layout";
 import ClientsList from "@/pages/Client/ClientsList";
 
 function App() {

@@ -7,15 +7,30 @@ use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::all();
+        $search = $request->input('filters.search');
+        $status = $request->input('currentStatus');
+        $perPage = $request->input('perPage', 10);
+        $query = Client::query();
+
+        if ($search) {
+            $query->where('phone', 'like', "%{$search}%")
+              ->orWhere('id', 'like', "%{$search}%");
+        }
+
+        if ($status !== null && $status !== 'all') {
+            $query->where('is_active', $status);
+        }
+
+        $clients = $query->orderBy('id', 'desc')->paginate($perPage);
 
         return ClientResource::collection($clients);
     }
@@ -25,19 +40,20 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
+        $validated = $request->validated();
         $user = User::Create([
-            'name' => $request->name,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
+            'name' => $validated['name'],
+            'lastname' => $validated['lastname'],
+            'email' => $validated['email'],
             'password' => bcrypt('12345678'), // Contraseña por defecto, se recomienda cambiarla
         ]);
         $client = Client::create([
             'user_id' => $user->id,
-            'phone' => $request->phone,
-            'inscription_date' => $request->inscription_date,
-            'expiration_date' => $request->expiration_date,
-            'is_active' => $request->is_active ?? true,
-            'medical_notes' => $request->medical_notes,
+            'phone' => $validated['phone'],
+            'inscription_date' => $validated['inscription_date'],
+            'expiration_date' => $validated['expiration_date'],
+            'is_active' => $validated['is_active'] ?? true,
+            'medical_notes' => $validated['medical_notes'],
         ]);
 
         return (new ClientResource($client))

@@ -18,7 +18,7 @@ class ClientResource extends JsonResource
         'id' => $this->id,
         'user_id' => $this->user_id,
         'phone' => $this->phone,
-        'enrollment_date' => $this->enrollment_date,
+        'inscription_date' => $this->inscription_date,
         'expiration_date' => $this->expiration_date,
         'status' => $this->is_active,
         'medical_notes' => $this->medical_notes,
