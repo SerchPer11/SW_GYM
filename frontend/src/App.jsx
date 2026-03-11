@@ -1,38 +1,43 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import Layout from "@/components/Layout/Layout";
+import ProtectedRoute from "@/components/Layout/ProtectedRoute";
 import ClientsList from "@/pages/Client/ClientsList";
 import LoginForm from "@/pages/Auth/LoginForm";
-import { useAuth } from "@/context/AuthContext";
-import { Dumbbell } from "lucide-react";
+import PermissionRoute from "@/components/Layout/PermissionRoute";
 
 function App() {
-  const { user, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center bg-slate-100 text-slate-700 text-lg font-medium gap-6 flex-col">
-        <Dumbbell className="animate-spin text-slate-500" size={48} />
-        Cargando pesos pesados...</div>;
-  }
-
-  if (!user) {
-    return <LoginForm />;
-  }
+  const { user } = useAuth();
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/clients" element={<ClientsList />} />
-        <Route
-          path="/"
-          element={
-            <div className="p-8">
-              <h1>Bienvenido al Dashboard</h1>
-            </div>
-          }
-        />
-        // otras rutas...
-      </Routes>
-    </Layout>
+    <Routes>
+      <Route 
+        path="/login" 
+        element={user ? <Navigate to="/clients" replace /> : <LoginForm />} 
+      />
+
+      <Route element={<ProtectedRoute />}>
+        
+        <Route element={<Layout />}>
+          
+          <Route element={<PermissionRoute requiredPermission="clients.index" />}>
+            <Route path="/clients" element={<ClientsList />} />
+          </Route>
+          
+          <Route
+            path="/"
+            element={
+              <div className="p-8">
+                <h1 className="text-2xl font-bold">Bienvenido al Dashboard</h1>
+              </div>
+            }
+          />
+          
+        </Route>
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

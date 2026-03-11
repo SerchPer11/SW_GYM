@@ -3,7 +3,6 @@ import { useAuth } from "@/context/AuthContext";
 import FormInput from "@/components/common/FormInput";
 import CustomButton from "@/components/common/CustomButton";
 import { Lock, Mail, LogIn } from "lucide-react";
-import { Toaster } from "sonner";
 import {
   Card,
   CardContent,
@@ -80,7 +79,6 @@ export default function LoginForm() {
           </form>
         </CardContent>
       </Card>
-      <Toaster position="top-right" richColors />
     </div>
   );
 }

@@ -5,8 +5,9 @@ import {
 } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/Layout/AppSidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { Outlet } from "react-router-dom";
 
-export default function Layout({ children }) {
+export default function Layout() {
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
@@ -17,11 +18,11 @@ export default function Layout({ children }) {
         
         <main className="flex-1 bg-slate-200/50 overflow-y-auto overflow-x-hidden w-full">
           <div className="mx-auto w-full max-w-5xl p-4 md:p-6">
-            {children}
+            <Outlet />
           </div>
         </main>
 
-        <Toaster position="top-right" richColors />
+        
       </SidebarInset>
     </SidebarProvider>
   );

@@ -12,18 +12,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("auth_token");
-      
+
       if (token) {
         try {
           const response = await authService.getProfile();
-          
+
           setUser(response.user);
         } catch (error) {
           localStorage.removeItem("auth_token");
           setUser(null);
         }
       }
-      
+
       setIsLoading(false);
     };
 
@@ -43,9 +43,7 @@ export const AuthProvider = ({ children }) => {
       const backendErrors = error.response?.data?.errors || {};
       const errorMessage =
         error.response?.data?.message || "Credenciales incorrectas";
-      toast.error(
-          "Error al iniciar sesión. Verifique sus credenciales",
-      );
+      toast.error("Error al iniciar sesión. Verifique sus credenciales");
       return { success: false, errors: backendErrors };
     }
   };
@@ -54,11 +52,11 @@ export const AuthProvider = ({ children }) => {
     try {
       await authService.logout();
     } catch (error) {
-      console.error("Error al cerrar sesión:", error);
+      toast.error("Error al cerrar sesión. Inténtalo de nuevo.");
     } finally {
       localStorage.removeItem("auth_token");
       setUser(null);
-      toast.success("Sesión cerrada correctamente.");
+      toast.info("Sesión cerrada correctamente");
     }
   };
 
