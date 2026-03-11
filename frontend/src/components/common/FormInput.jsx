@@ -9,9 +9,9 @@ export default function FormInput({ label, error, name, ...props }) {
         id={name}
         name={name}
         {...props} 
-        className={`${error ? "border-rose-500 focus-visible:ring-rose-500" : "border-slate-200"}`}
+        className={`${error ? "border-red-500 focus-visible:ring-red-500" : "border-slate-200"}`}
       />
-      {error && <p className="text-xs font-medium text-rose-500 mt-1">{error}</p>}
+      {error && <p className="text-xs font-medium text-red-500 mt-1">{error}</p>}
     </div>
   )
 }
