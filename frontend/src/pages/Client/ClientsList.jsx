@@ -1,16 +1,11 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
-import api from "@/lib/axios";
-import { Pencil, Trash2, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import CustomButton from "@/components/CustomButton";
-import { Input } from "@/components/ui/input";
+import { Pencil, Trash2 } from "lucide-react";
+import ClientForm from "./ClientForm";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
+import PageHeader from "@/components/common/PageHeader";
+import { useCrud } from "@/hooks/useCrud";
+import Pagination from "@/components/common/Pagination";
+import FilterBar from "@/components/common/FilterBar";
 import {
   Table,
   TableBody,
@@ -19,130 +14,86 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import ClientForm from "./ClientForm";
+import TableSkeleton from "@/components/common/TableSkeleton";
 
 export default function ClientsList() {
-  const [clients, setClients] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Cargar clientes al montar el componente
-  const fetchClients = () => {
-    api
-      .get("/clients")
-      .then((response) => setClients(response.data.data))
-      .catch((error) => console.error("Error:", error));
-  };
-
-  useEffect(() => {
-    fetchClients();
-  }, []);
-
-  // Función para manejar el Soft Delete
-  const handleDelete = async (id) => {
-    if (
-      window.confirm(
-        "¿Estás seguro de eliminar este cliente? Se mantendrá en el historial de auditoría.",
-      )
-    ) {
-      try {
-        await api.delete(`/clients/${id}`);
-        // Filtramos el estado local para que desaparezca visualmente
-        setClients(clients.filter((c) => c.id !== id));
-      } catch (error) {
-        console.error("No se pudo eliminar:", error);
-      }
-    }
-  };
-
-  // Filtrado básico en el cliente
-  const filteredClients = clients.filter(
-    (client) =>
-      client.phone?.includes(searchTerm) ||
-      client.id.toString().includes(searchTerm),
-  );
-
-  const [open, setOpen] = useState(false);
+  const {
+    data: clients,
+    isLoading,
+    filters,
+    setFilters,
+    page,
+    perPage,
+    setPerPage,
+    setPage,
+    statusFilter,
+    setStatusFilter,
+    meta,
+    confirmModal,
+    setConfirmModal,
+    fetchData: fetchClients,
+    remove: handleDelete,
+  } = useCrud("/clients", "Socio");
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">
-            Gestión de Clientes
-          </h1>
-          <p className="text-slate-500">
-            Administra los miembros y sus membresías.
-          </p>
-        </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <CustomButton
-              icon={Plus}
-              variant="default"
-              className="bg-slate-900"
-            >
-              Nuevo Cliente
-            </CustomButton>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[550px]">
-            <DialogHeader>
-              <DialogTitle className="text-xl font-bold">
-                Registrar Nuevo Socio
-              </DialogTitle>
-            </DialogHeader>
-            <ClientForm
-              onSuccess={() => {
-                setOpen(false);
-                fetchClients();
-              }}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <PageHeader
+        title="Gestionar Socios"
+        description="Administra la información de los socios y sus membresías."
+        actionButton={<ClientForm onSuccess={fetchClients} />}
+      />
 
-      <div className="flex items-center gap-2 mb-6 max-w-sm">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <Input
-            placeholder="Buscar por teléfono o ID..."
-            className="pl-10"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
+      <FilterBar
+        filters={filters}
+        setFilters={setFilters}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        perPage={perPage}
+        setPerPage={setPerPage}
+      />
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <Table>
-          <TableHeader className="bg-slate-50">
+      <div className="bg-slate-50/50 rounded-sm shadow-sm border-b-2 border-slate-300 overflow-hidden">
+        <Table className="md:table-auto">
+          <TableHeader className="bg-slate-700 border-b-2 border-slate-300">
             <TableRow>
-              <TableHead className="w-[80px]">ID</TableHead>
-              <TableHead>Teléfono</TableHead>
-              <TableHead>Vencimiento</TableHead>
-              <TableHead>Estado</TableHead>
-              <TableHead className="text-right">Acciones</TableHead>
+              <TableHead className="w-[80px] text-slate-300 text-center">
+                ID
+              </TableHead>
+              <TableHead className="text-slate-300 text-center">
+                Teléfono
+              </TableHead>
+              <TableHead className="text-slate-300 text-center">
+                Fecha de Inscripción
+              </TableHead>
+              <TableHead className="text-slate-300 text-center">
+                Estado
+              </TableHead>
+              <TableHead className="text-slate-300 text-center">
+                Acciones
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredClients.length > 0 ? (
-              filteredClients.map((client) => (
+            {isLoading ? (
+              <TableSkeleton length={5} columns={5} />
+            ) : clients.length > 0 ? (
+              clients.map((client) => (
                 <TableRow
                   key={client.id}
-                  className="hover:bg-slate-50/50 transition-colors"
+                  className="hover:bg-slate-300/50 transition-colors border-b border-slate-200"
                 >
-                  <TableCell className="font-medium text-slate-600">
+                  <TableCell className="font-medium text-slate-500 text-center">
                     #{client.id}
                   </TableCell>
-                  <TableCell>{client.phone || "N/A"}</TableCell>
-                  <TableCell className="text-slate-600">
-                    {client.expiration_date
-                      ? new Date(client.expiration_date).toLocaleDateString(
-                          "es-MX",
-                          { day: "2-digit", month: "short", year: "numeric" },
-                        )
+                  <TableCell className="text-center">
+                    {client.phone || "N/A"}
+                  </TableCell>
+                  <TableCell className="text-slate-600 text-center">
+                    {client.inscription_date
+                      ? client.inscription_date
                       : "Sin fecha"}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         client.status === 1
@@ -153,20 +104,28 @@ export default function ClientsList() {
                       {client.status === 1 ? "Activo" : "Inactivo"}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="default"
-                        size="icon"
-                        className="h-8 w-8 text-blue-100 hover:text-blue-600"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </Button>
+                  <TableCell className="text-center">
+                    <div className="flex justify-center gap-2">
+                      <ClientForm
+                        client={client} // Le mandamos la info de ESTE cliente
+                        onSuccess={fetchClients} // Para que recargue la tabla al guardar
+                        trigger={
+                          <Button
+                            variant="default"
+                            size="icon"
+                            className="h-8 w-8 text-slate-700 hover:text-slate-500 bg-slate-100 hover:bg-slate-300"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                        }
+                      />
                       <Button
                         variant="destructive"
                         size="icon"
-                        className="h-8 w-8 text-rose-100 hover:text-rose-400"
-                        onClick={() => handleDelete(client.id)}
+                        className="h-8 w-8 text-rose-500 hover:text-rose-700 bg-slate-100 hover:bg-slate-300"
+                        onClick={() =>
+                          setConfirmModal({ isOpen: true, itemId: client.id })
+                        }
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -186,7 +145,24 @@ export default function ClientsList() {
             )}
           </TableBody>
         </Table>
+        <Pagination
+          meta={meta}
+          page={page}
+          setPage={setPage}
+          isLoading={isLoading}
+        />
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, itemId: null })}
+        onConfirm={handleDelete}
+        title="Eliminar registro de cliente"
+        description="Esta acción desvinculará al cliente del sistema y perderá su acceso. ¿Deseas continuar?"
+        confirmText="Sí, dar de baja"
+        cancelText="Conservar cliente"
+        variant="destructive"
+      />
     </div>
   );
 }

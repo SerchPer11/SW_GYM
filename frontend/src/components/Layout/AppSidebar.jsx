@@ -58,7 +58,7 @@ export default function AppSidebar() {
                 <Dumbbell className="size-4" />
               </div>
               <div className="ml-2 hidden text-sm font-semibold md:block">
-                <span className="font-semibold">Gym Manager</span>
+                <span className="font-semibold text-white">Gym Manager</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -101,7 +101,7 @@ export default function AppSidebar() {
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip={item.title}>
+                        <SidebarMenuButton tooltip={item.title} className="hover:bg-slate-700 hover:text-white transition-colors">
                           <item.icon className="text-slate-300" />
                           <span className="text-slate-300">{item.title}</span>
                           <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 text-slate-300" />
