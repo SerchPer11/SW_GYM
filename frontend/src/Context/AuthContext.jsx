@@ -37,7 +37,9 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("auth_token", data.access_token);
 
       setUser(data.user);
-      toast.success("Sesión iniciada correctamente.");
+      toast.success("Sesión iniciada correctamente.",{
+        description: `Bienvenido, ${data.user.name}!`,
+      });
       return { success: true };
     } catch (error) {
       const backendErrors = error.response?.data?.errors || {};
