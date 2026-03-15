@@ -100,7 +100,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             <FormInput
               label="Inscripción"
               name="inscription_date"
@@ -114,8 +114,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
               name="expiration_date"
               type="date"
               defaultValue={client?.expiration_date?.raw}
-              error={errors.expiration_date?.[0]
-              }
+              error={errors.expiration_date?.[0]}
             />
           </div>
 
