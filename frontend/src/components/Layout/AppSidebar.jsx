@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import {
   ChevronRight,
   ChevronsUpDown,
@@ -41,6 +42,7 @@ import {
 export default function AppSidebar() {
   const location = useLocation();
   const { menuItems } = useSidebarNavigation();
+  const { user, logout } = useAuth();
 
   return (
     <Sidebar
@@ -93,15 +95,25 @@ export default function AppSidebar() {
               }
 
               if (item.type === "group") {
+                const hasActiveSubItem = item.items.some(
+                  (subItem) =>
+                    location.pathname === subItem.url ||
+                    location.pathname.startsWith(`${subItem.url}/`),
+                );
+
                 return (
                   <Collapsible
                     key={item.title}
-                    defaultOpen={item.isActive}
+                    defaultOpen={item.isActive || hasActiveSubItem}
                     className="group/collapsible"
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip={item.title} className="hover:bg-slate-700 hover:text-white transition-colors">
+                        <SidebarMenuButton
+                          tooltip={item.title}
+                          isActive={hasActiveSubItem}
+                          className="text-slate-300 hover:bg-slate-700 hover:text-white data-[active=true]:bg-slate-600 data-[active=true]:text-white transition-colors"
+                        >
                           <item.icon className="text-slate-300" />
                           <span className="text-slate-300">{item.title}</span>
                           <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 text-slate-300" />
@@ -150,11 +162,11 @@ export default function AppSidebar() {
                   className="data-[state=open]:bg-slate-700 data-[state=open]:text-slate-foreground hover:bg-slate-700 hover:text-white transition-colors"
                 >
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-500 text-slate-300">
-                    <span className="font-bold">A</span>
+                    <span className="font-bold uppercase">{user?.name?.charAt(0) || "U"}</span>
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Admin</span>
-                    <span className="truncate text-xs">admin@gym.com</span>
+                    <span className="truncate font-semibold">{user?.name} {user?.lastname}</span>
+                    <span className="truncate text-xs text-slate-400">{user?.email}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -168,14 +180,14 @@ export default function AppSidebar() {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-500 text-slate-300">
-                      <span className="font-bold">A</span>
+                      <span className="font-bold uppercase">{user?.name?.charAt(0) || "U"}</span>
                     </div>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold text-slate-300">
-                        Admin
+                        {user?.name} {user?.lastname}
                       </span>
                       <span className="truncate text-xs text-slate-400">
-                        admin@gym.com
+                        {user?.email}
                       </span>
                     </div>
                   </div>
@@ -189,7 +201,7 @@ export default function AppSidebar() {
 
                 <DropdownMenuSeparator className="bg-slate-600" />
 
-                <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50 hover:bg-red-900 transition-colors hover:text-red-300">
+                <DropdownMenuItem onClick={logout} className="text-red-600 focus:text-red-600 focus:bg-red-50 hover:bg-red-900 transition-colors hover:text-red-300">
                   <LogOut className="mr-2 size-4" />
                   <span>Cerrar Sesión</span>
                 </DropdownMenuItem>

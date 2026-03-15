@@ -1,7 +1,26 @@
-import { Home, Users, Dumbbell, Calendar, Settings, ChevronRight } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import {
+  Home,
+  Users,
+  Dumbbell,
+  Calendar,
+  Shield,
+  Settings,
+  ChevronRight,
+} from "lucide-react";
 
 export function useSidebarNavigation() {
-  const menuItems = [
+  const { user } = useAuth();
+
+  const hasPermission = (permissionName) => {
+    if (!permissionName) return true;
+
+    const isAdmin = user?.roles?.some((role) => role.name === "admin");
+    if (isAdmin) return true;
+
+    return user?.permissions?.some((p) => p.name === permissionName);
+  };
+  const rawMenuItems = [
     {
       title: "Dashboard",
       url: "/",
@@ -9,34 +28,72 @@ export function useSidebarNavigation() {
       type: "single",
     },
     {
-      title: "Clientes",
-      url: "/clients",
-      icon: Users,
-      type: "single",
-    },
-    {
-      title: "Membresías",
-      icon: Dumbbell,
-      type: "group",
-      // Si quieres que el menú empiece abierto por defecto
-      isActive: true, 
-      items: [
-        { title: "Planes Activos", url: "/memberships/active" },
-        { title: "Renovaciones", url: "/memberships/renewals" },
-        { title: "Historial", url: "/memberships/history" },
-      ],
-    },
-    {
-      title: "Agenda",
-      icon: Calendar,
+      title: "Seguridad",
+      icon: Shield,
       type: "group",
       isActive: true,
       items: [
-        { title: "Clases Grupales", url: "/schedule/classes" },
-        { title: "Entrenadores", url: "/schedule/trainers" },
+        {
+          title: "Roles",
+          url: "/security/roles",
+          permission: "roles.index",
+        },
+        {
+          title: "Modulos",
+          url: "/security/modules",
+          permission: "modules.index",
+        },
+        {
+          title: "Permisos",
+          url: "/security/permissions",
+          permission: "permissions.index",
+        },
+      ],
+    },
+    {
+      title: "Usuarios",
+      icon: Users,
+      type: "group",
+      isActive: true,
+      items: [
+        {
+          title: "Lista de Usuarios",
+          url: "/users",
+          permission: "users.index",
+        },
+        {
+          title: "Personal",
+          url: "/users/personal",
+          permission: "personal.index",
+        },
+        {
+          title: "Clientes",
+          url: "/users/clients",
+          icon: Users,
+          permission: "clients.index",
+        },
       ],
     },
   ];
+
+  const menuItems = rawMenuItems
+    .map((item) => {
+      if (item.type !== "group") {
+        return item;
+      }
+
+      return {
+        ...item,
+        items: item.items.filter((subItem) => hasPermission(subItem.permission)),
+      };
+    })
+    .filter((item) => {
+      if (item.type === "group") {
+        return item.items.length > 0;
+      }
+
+      return hasPermission(item.permission);
+    });
 
   return { menuItems };
 }
