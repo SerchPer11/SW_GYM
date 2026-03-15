@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route 
         path="/login" 
-        element={user ? <Navigate to="/clients" replace /> : <LoginForm />} 
+        element={user ? <Navigate to="/" replace /> : <LoginForm />} 
       />
 
       <Route element={<ProtectedRoute />}>
@@ -21,7 +21,7 @@ function App() {
         <Route element={<Layout />}>
           
           <Route element={<PermissionRoute requiredPermission="clients.index" />}>
-            <Route path="/clients" element={<ClientsList />} />
+            <Route path="users/clients" element={<ClientsList />} />
           </Route>
           
           <Route

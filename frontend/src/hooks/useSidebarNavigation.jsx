@@ -4,6 +4,7 @@ import {
   Users,
   Dumbbell,
   Calendar,
+  Shield,
   Settings,
   ChevronRight,
 } from "lucide-react";
@@ -27,39 +28,72 @@ export function useSidebarNavigation() {
       type: "single",
     },
     {
-      title: "Clientes",
-      url: "/clients",
-      icon: Users,
-      type: "single",
-      permission: "clients.index",
-    },
-    {
-      title: "Membresías",
-      icon: Dumbbell,
+      title: "Seguridad",
+      icon: Shield,
       type: "group",
-      // Si quieres que el menú empiece abierto por defecto
       isActive: true,
       items: [
-        { title: "Planes Activos", url: "/memberships/active" },
-        { title: "Renovaciones", url: "/memberships/renewals" },
-        { title: "Historial", url: "/memberships/history" },
+        {
+          title: "Roles",
+          url: "/security/roles",
+          permission: "roles.index",
+        },
+        {
+          title: "Modulos",
+          url: "/security/modules",
+          permission: "modules.index",
+        },
+        {
+          title: "Permisos",
+          url: "/security/permissions",
+          permission: "permissions.index",
+        },
       ],
     },
     {
-      title: "Agenda",
-      icon: Calendar,
+      title: "Usuarios",
+      icon: Users,
       type: "group",
       isActive: true,
       items: [
-        { title: "Clases Grupales", url: "/schedule/classes" },
-        { title: "Entrenadores", url: "/schedule/trainers" },
+        {
+          title: "Lista de Usuarios",
+          url: "/users",
+          permission: "users.index",
+        },
+        {
+          title: "Personal",
+          url: "/users/personal",
+          permission: "personal.index",
+        },
+        {
+          title: "Clientes",
+          url: "/users/clients",
+          icon: Users,
+          permission: "clients.index",
+        },
       ],
     },
   ];
 
-  const menuItems = rawMenuItems.filter((item) =>
-    hasPermission(item.permission),
-  );
+  const menuItems = rawMenuItems
+    .map((item) => {
+      if (item.type !== "group") {
+        return item;
+      }
+
+      return {
+        ...item,
+        items: item.items.filter((subItem) => hasPermission(subItem.permission)),
+      };
+    })
+    .filter((item) => {
+      if (item.type === "group") {
+        return item.items.length > 0;
+      }
+
+      return hasPermission(item.permission);
+    });
 
   return { menuItems };
 }

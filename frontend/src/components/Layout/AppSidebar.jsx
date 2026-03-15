@@ -95,15 +95,25 @@ export default function AppSidebar() {
               }
 
               if (item.type === "group") {
+                const hasActiveSubItem = item.items.some(
+                  (subItem) =>
+                    location.pathname === subItem.url ||
+                    location.pathname.startsWith(`${subItem.url}/`),
+                );
+
                 return (
                   <Collapsible
                     key={item.title}
-                    defaultOpen={item.isActive}
+                    defaultOpen={item.isActive || hasActiveSubItem}
                     className="group/collapsible"
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip={item.title} className="hover:bg-slate-700 hover:text-white transition-colors">
+                        <SidebarMenuButton
+                          tooltip={item.title}
+                          isActive={hasActiveSubItem}
+                          className="text-slate-300 hover:bg-slate-700 hover:text-white data-[active=true]:bg-slate-600 data-[active=true]:text-white transition-colors"
+                        >
                           <item.icon className="text-slate-300" />
                           <span className="text-slate-300">{item.title}</span>
                           <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 text-slate-300" />
