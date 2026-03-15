@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\StoreUserRequest;
 
 class StoreClientRequest extends FormRequest
 {
@@ -21,25 +22,30 @@ class StoreClientRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $userRules = (new StoreUserRequest())->rules();
+        $clientRules = [
             'user_id' => 'nullable|exists:users,id',
             'phone' => 'nullable|string|max:20',
             'inscription_date' => 'nullable|date',
             'expiration_date' => 'nullable|date|after_or_equal:inscription_date',
             'is_active' => 'boolean',
-            'medical_notes' => 'nullable|string',
         ];
+
+        return array_merge($userRules, $clientRules);
     }
 
     public function attributes()
     {
-        return [
+        $userAttributes = (new StoreUserRequest())->attributes();
+
+        $clientAttributes = [
             'user_id' => 'ID de usuario',
             'phone' => 'Teléfono',
             'inscription_date' => 'Fecha de inscripción',
             'expiration_date' => 'Fecha de vencimiento',
             'is_active' => 'Estado activo',
-            'medical_notes' => 'Notas médicas',
         ];
+
+        return array_merge($userAttributes, $clientAttributes);
     }
 }

@@ -2,20 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Services\ClientService;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    protected ClientService $clientService;
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function __construct(ClientService $clientService)
     {
-        $clients = Client::all();
+        $this->clientService = $clientService;
+    }
+
+    public function index(Request $request)
+    {
+        $search = $request->input('filters.search');
+        $status = $request->input('currentStatus');
+        $perPage = $request->input('perPage', 5);
+        $query = Client::query()->with('user');
+
+        if ($search) {
+            $query->where('phone', 'like', "%{$search}%")
+                ->orWhere('id', 'like', "%{$search}%")
+                ->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+        }
+
+        if ($status !== null && $status !== 'all') {
+            $query->where('is_active', $status);
+        }
+
+        $clients = $query->orderBy('id', 'desc')->paginate($perPage);
 
         return ClientResource::collection($clients);
     }
@@ -25,25 +53,16 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        $user = User::Create([
-            'name' => $request->name,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
-            'password' => bcrypt('12345678'), // Contraseña por defecto, se recomienda cambiarla
-        ]);
-        $client = Client::create([
-            'user_id' => $user->id,
-            'phone' => $request->phone,
-            'inscription_date' => $request->inscription_date,
-            'expiration_date' => $request->expiration_date,
-            'is_active' => $request->is_active ?? true,
-            'medical_notes' => $request->medical_notes,
-        ]);
+        try {
+            $client = $this->clientService->createClient($request->validated());
 
-        return (new ClientResource($client))
-        ->additional(['message' => 'Cliente creado exitosamente!'])
-        ->response()
-        ->setStatusCode(201);
+            return (new ClientResource($client))
+                ->additional(['message' => 'Cliente creado exitosamente!'])
+                ->response()
+                ->setStatusCode(201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al crear el cliente', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -59,10 +78,14 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client)
     {
-        $client->update($request->validated());
+        try {
+            $this->clientService->updateClient($request->validated(), $client);
 
-        return (new ClientResource($client))
-        ->additional(['message' => 'Cliente actualizado exitosamente!']);
+            return (new ClientResource($client))
+                ->additional(['message' => 'Cliente actualizado exitosamente!']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al actualizar el cliente', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**

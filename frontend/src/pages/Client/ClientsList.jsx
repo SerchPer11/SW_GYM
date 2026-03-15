@@ -33,7 +33,7 @@ export default function ClientsList() {
     setConfirmModal,
     fetchData: fetchClients,
     remove: handleDelete,
-  } = useCrud("/clients", "Socio");
+  } = useCrud("users/clients", "Socio");
 
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
@@ -60,6 +60,12 @@ export default function ClientsList() {
                 ID
               </TableHead>
               <TableHead className="text-slate-300 text-center">
+                Nombre
+              </TableHead>
+              <TableHead className="text-slate-300 text-center">
+                Correo
+              </TableHead>
+              <TableHead className="text-slate-300 text-center">
                 Teléfono
               </TableHead>
               <TableHead className="text-slate-300 text-center">
@@ -75,7 +81,7 @@ export default function ClientsList() {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableSkeleton length={5} columns={5} />
+              <TableSkeleton length={5} columns={7} />
             ) : clients.length > 0 ? (
               clients.map((client) => (
                 <TableRow
@@ -86,11 +92,17 @@ export default function ClientsList() {
                     #{client.id}
                   </TableCell>
                   <TableCell className="text-center">
+                    {client.user?.full_name || "N/A"}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {client.user?.email || "N/A"}
+                  </TableCell>
+                  <TableCell className="text-center">
                     {client.phone || "N/A"}
                   </TableCell>
                   <TableCell className="text-slate-600 text-center">
                     {client.inscription_date
-                      ? client.inscription_date
+                      ? client.inscription_date?.human
                       : "Sin fecha"}
                   </TableCell>
                   <TableCell className="text-center">
@@ -107,8 +119,8 @@ export default function ClientsList() {
                   <TableCell className="text-center">
                     <div className="flex justify-center gap-2">
                       <ClientForm
-                        client={client} // Le mandamos la info de ESTE cliente
-                        onSuccess={fetchClients} // Para que recargue la tabla al guardar
+                        client={client}
+                        onSuccess={fetchClients}
                         trigger={
                           <Button
                             variant="default"
