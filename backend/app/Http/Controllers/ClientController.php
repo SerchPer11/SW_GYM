@@ -2,28 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Services\ClientService;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    protected ClientService $clientService;
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct(ClientService $clientService)
+    {
+        $this->clientService = $clientService;
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('filters.search');
         $status = $request->input('currentStatus');
-        $perPage = $request->input('perPage', 10);
-        $query = Client::query();
+        $perPage = $request->input('perPage', 5);
+        $query = Client::query()->with('user');
 
         if ($search) {
             $query->where('phone', 'like', "%{$search}%")
-              ->orWhere('id', 'like', "%{$search}%");
+                ->orWhere('id', 'like', "%{$search}%")
+                ->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
         }
 
         if ($status !== null && $status !== 'all') {
@@ -40,26 +53,16 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        $validated = $request->validated();
-        $user = User::Create([
-            'name' => $validated['name'],
-            'lastname' => $validated['lastname'],
-            'email' => $validated['email'],
-            'password' => bcrypt('12345678'), // Contraseña por defecto, se recomienda cambiarla
-        ]);
-        $client = Client::create([
-            'user_id' => $user->id,
-            'phone' => $validated['phone'],
-            'inscription_date' => $validated['inscription_date'],
-            'expiration_date' => $validated['expiration_date'],
-            'is_active' => $validated['is_active'] ?? true,
-            'medical_notes' => $validated['medical_notes'],
-        ]);
+        try {
+            $client = $this->clientService->createClient($request->validated());
 
-        return (new ClientResource($client))
-        ->additional(['message' => 'Cliente creado exitosamente!'])
-        ->response()
-        ->setStatusCode(201);
+            return (new ClientResource($client))
+                ->additional(['message' => 'Cliente creado exitosamente!'])
+                ->response()
+                ->setStatusCode(201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al crear el cliente', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -75,10 +78,14 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client)
     {
-        $client->update($request->validated());
+        try {
+            $this->clientService->updateClient($request->validated(), $client);
 
-        return (new ClientResource($client))
-        ->additional(['message' => 'Cliente actualizado exitosamente!']);
+            return (new ClientResource($client))
+                ->additional(['message' => 'Cliente actualizado exitosamente!']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al actualizar el cliente', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**

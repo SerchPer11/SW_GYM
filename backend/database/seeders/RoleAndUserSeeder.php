@@ -21,7 +21,7 @@ class RoleAndUserSeeder extends Seeder
         // Create a default admin user
         $admin = User::create([
             'name' => 'Admin',
-            'last_name' => 'General',
+            'lastname' => 'General',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('12345678'),
             'gender' => 'male',
@@ -44,9 +44,12 @@ class RoleAndUserSeeder extends Seeder
         $adminRole->givePermissionTo(Permission::all());
         // Create the 'receptionist' role and assign specific permissions to it
         $receptionistRole = Role::create(['name' => 'receptionist']);
+        Role::create(['name' => 'trainer', 'description' => 'Entrenador']);
+        Role::create(['name' => 'client', 'description' => 'Cliente']);
+
         $receptionistRole->givePermissionTo([
-            'clients.index', 
-            'clients.create', 
+            'clients.index',
+            'clients.create',
             'clients.update',
             'clients.show',
         ]);

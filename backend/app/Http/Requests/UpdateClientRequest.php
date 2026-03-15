@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateClientRequest extends FormRequest
 {
@@ -21,13 +22,39 @@ class UpdateClientRequest extends FormRequest
      */
     public function rules(): array
     {
+        $clientUserId = $this->route('client')?->user_id;
+
         return [
-            'user_id' => 'sometimes|required|exists:users,id',
-            'phone' => 'nullable|string|max:20',
-            'inscription_date' => 'nullable|date',
-            'expiration_date' => 'nullable|date|after_or_equal:inscription_date',
-            'is_active' => 'boolean',
-            'medical_notes' => 'nullable|string',
+            'name'                => ['sometimes', 'required', 'string', 'max:255'],
+            'lastname'            => ['sometimes', 'required', 'string', 'max:255'],
+            'gender'              => ['sometimes', 'required', 'string', 'in:male,female,other'],
+            'email'               => ['sometimes', 'required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($clientUserId)],
+            'password'            => ['sometimes', 'required', 'string', 'min:8', 'confirmed'],
+            'roles'               => ['sometimes', 'required', 'array'],
+            'roles.*'             => ['string', 'exists:roles,id'],
+            'user_id'             => 'nullable|exists:users,id',
+            'phone'               => 'nullable|string|max:20',
+            'inscription_date'    => 'nullable|date',
+            'expiration_date'     => 'nullable|date|after_or_equal:inscription_date',
+            'is_active'           => 'boolean',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name'             => 'nombre',
+            'lastname'         => 'apellido',
+            'gender'           => 'género',
+            'email'            => 'correo electrónico',
+            'password'         => 'contraseña',
+            'roles'            => 'roles',
+            'roles.*'          => 'rol',
+            'user_id'          => 'ID de usuario',
+            'phone'            => 'Teléfono',
+            'inscription_date' => 'Fecha de inscripción',
+            'expiration_date'  => 'Fecha de vencimiento',
+            'is_active'        => 'Estado activo',
         ];
     }
 }

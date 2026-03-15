@@ -7,7 +7,7 @@ export function useForm(client, onSuccessCallback) {
         update: handleUpdate,
         errors,
         isLoading,
-    } = useCrud("/clients", "Socio");
+    } = useCrud("users/clients", "Socio");
 
     const isEditMode = !!client;
 

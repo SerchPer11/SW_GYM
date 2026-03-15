@@ -22,7 +22,6 @@ class Client extends Model
         'inscription_date',
         'expiration_date',
         'is_active',
-        'medical_notes',
     ];
 
     public function user()

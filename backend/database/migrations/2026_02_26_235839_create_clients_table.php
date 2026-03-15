@@ -18,7 +18,6 @@ return new class extends Migration
             $table->date('inscription_date')->useCurrent();
             $table->date('expiration_date')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->text('medical_notes')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
