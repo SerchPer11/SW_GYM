@@ -11,7 +11,7 @@ Este sistema está siendo desarrollado como un reto técnico para aplicar arquit
 * **Backend:** Laravel (API RESTful / Autenticación)
 * **Frontend:** React.js
 * **Estilos:** Tailwind CSS
-* **Base de Datos:** MySQL / PostgreSQL *(cambia esto por la que uses)*
+* **Base de Datos:** MySQL
 
 ## ✨ Características Actuales
 
