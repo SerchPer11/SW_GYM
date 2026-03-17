@@ -2,11 +2,7 @@ import { useAuth } from "@/context/AuthContext";
 import {
   Home,
   Users,
-  Dumbbell,
-  Calendar,
   Shield,
-  Settings,
-  ChevronRight,
 } from "lucide-react";
 
 export function useSidebarNavigation() {
@@ -56,11 +52,6 @@ export function useSidebarNavigation() {
       type: "group",
       isActive: true,
       items: [
-        {
-          title: "Lista de Usuarios",
-          url: "/users",
-          permission: "users.index",
-        },
         {
           title: "Personal",
           url: "/users/personal",

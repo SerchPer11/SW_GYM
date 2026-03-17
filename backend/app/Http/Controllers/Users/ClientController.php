@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
+use App\Http\Controllers\Controller;
 use App\Http\Services\ClientService;
-use App\Models\Client;
+use App\Models\Users\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller

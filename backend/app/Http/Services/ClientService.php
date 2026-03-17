@@ -2,8 +2,8 @@
 
 namespace App\Http\Services;
 
-use App\Models\User;
-use App\Models\Client;
+use App\Models\Users\User;
+use App\Models\users\Client;
 use Illuminate\Support\Facades\DB;
 
 class ClientService
