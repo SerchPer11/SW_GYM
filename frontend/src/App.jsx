@@ -1,43 +1,47 @@
+import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import Layout from "@/components/Layout/Layout";
-import ProtectedRoute from "@/components/Layout/ProtectedRoute";
-import ClientsList from "@/pages/Client/ClientsList";
-import LoginForm from "@/pages/Auth/LoginForm";
-import PermissionRoute from "@/components/Layout/PermissionRoute";
+import { Dumbbell } from "lucide-react";
+
+const Layout = lazy(() => import("@/components/Layout/Layout"));
+const ProtectedRoute = lazy(() => import("@/components/Layout/ProtectedRoute"));
+const PermissionRoute = lazy(() => import("@/components/Layout/PermissionRoute"));
+const ClientsList = lazy(() => import("@/pages/Client/ClientsList"));
+const LoginForm = lazy(() => import("@/pages/Auth/LoginForm"));
 
 function App() {
   const { user } = useAuth();
 
   return (
-    <Routes>
-      <Route 
-        path="/login" 
-        element={user ? <Navigate to="/" replace /> : <LoginForm />} 
-      />
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-100 text-slate-700 text-lg font-medium gap-6 flex-col">
+        <Dumbbell className="animate-spin text-slate-500" size={48} />
+        Cargando pesos pesados...</div>}>
+      <Routes>
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <LoginForm />}
+        />
 
-      <Route element={<ProtectedRoute />}>
-        
-        <Route element={<Layout />}>
-          
-          <Route element={<PermissionRoute requiredPermission="clients.index" />}>
-            <Route path="users/clients" element={<ClientsList />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route element={<PermissionRoute requiredPermission="clients.index" />}>
+              <Route path="users/clients" element={<ClientsList />} />
+            </Route>
+
+            <Route
+              path="/"
+              element={
+                <div className="p-8">
+                  <h1 className="text-2xl font-bold">Bienvenido al Dashboard</h1>
+                </div>
+              }
+            />
           </Route>
-          
-          <Route
-            path="/"
-            element={
-              <div className="p-8">
-                <h1 className="text-2xl font-bold">Bienvenido al Dashboard</h1>
-              </div>
-            }
-          />
-          
         </Route>
-      </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Suspense>
   );
 }
 
