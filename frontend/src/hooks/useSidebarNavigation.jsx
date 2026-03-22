@@ -30,11 +30,6 @@ export function useSidebarNavigation() {
       isActive: true,
       items: [
         {
-          title: "Roles",
-          url: "/security/roles",
-          permission: "roles.index",
-        },
-        {
           title: "Modulos",
           url: "/security/modules",
           permission: "modules.index",
@@ -44,6 +39,11 @@ export function useSidebarNavigation() {
           url: "/security/permissions",
           permission: "permissions.index",
         },
+        {
+          title: "Roles",
+          url: "/security/roles",
+          permission: "roles.index",
+        }
       ],
     },
     {

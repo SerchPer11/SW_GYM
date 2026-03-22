@@ -11,16 +11,17 @@ export default function Pagination({ page, setPage, meta, isLoading }) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-between px-4 py-4 border-t border-slate-200 bg-white">
+      // 🌟 FIX: bg-transparent para que herede el color del "hueco" y borde más sutil
+      <div className="flex items-center justify-between px-4 py-4 border-t border-slate-200/70 bg-transparent">
         <div className="flex-1 text-sm text-slate-500">
-          <Skeleton className="h-4 w-48" />
+          <Skeleton className="h-4 w-48 bg-slate-200/50" />
         </div>
         <div className="flex items-center space-x-2">
-          <Skeleton className="h-8 w-8" />
-          <Skeleton className="h-8 w-8" />
-          <Skeleton className="h-8 w-[100px]" />
-          <Skeleton className="h-8 w-8" />
-          <Skeleton className="h-8 w-8" />
+          <Skeleton className="h-8 w-8 bg-slate-200/50" />
+          <Skeleton className="h-8 w-8 bg-slate-200/50" />
+          <Skeleton className="h-8 w-[100px] bg-slate-200/50" />
+          <Skeleton className="h-8 w-8 bg-slate-200/50" />
+          <Skeleton className="h-8 w-8 bg-slate-200/50" />
         </div>
       </div>
     );
@@ -31,7 +32,7 @@ export default function Pagination({ page, setPage, meta, isLoading }) {
   const { current_page, last_page, total, from, to } = meta;
 
   return (
-    <div className="flex items-center justify-between px-4 py-4 border-t border-slate-200 bg-white">
+    <div className="flex items-center justify-between px-4 py-4 border-t border-slate-200/70 bg-transparent">
       <div className="flex-1 text-sm text-slate-500">
         Mostrando del{" "}
         <span className="font-semibold text-slate-700">{from || 0}</span> al{" "}
@@ -42,7 +43,7 @@ export default function Pagination({ page, setPage, meta, isLoading }) {
       <div className="flex items-center space-x-2">
         <Button
           variant="outline"
-          className="hidden h-8 w-8 p-0 lg:flex text-slate-600"
+          className="hidden h-8 w-8 p-0 lg:flex text-slate-500 hover:text-slate-800"
           onClick={() => setPage(1)}
           disabled={current_page === 1}
         >
@@ -52,7 +53,7 @@ export default function Pagination({ page, setPage, meta, isLoading }) {
 
         <Button
           variant="outline"
-          className="h-8 w-8 p-0 text-slate-600"
+          className="h-8 w-8 p-0 text-slate-500 hover:text-slate-800"
           onClick={() => setPage(current_page - 1)}
           disabled={current_page === 1}
         >
@@ -60,13 +61,13 @@ export default function Pagination({ page, setPage, meta, isLoading }) {
           <ChevronLeft className="h-4 w-4" />
         </Button>
 
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium text-slate-700">
+        <div className="flex w-[100px] items-center justify-center text-sm font-medium text-slate-600">
           Página {current_page} de {last_page}
         </div>
 
         <Button
           variant="outline"
-          className="h-8 w-8 p-0 text-slate-600"
+          className="h-8 w-8 p-0 text-slate-500 hover:text-slate-800"
           onClick={() => setPage(current_page + 1)}
           disabled={current_page === last_page}
         >
@@ -76,7 +77,7 @@ export default function Pagination({ page, setPage, meta, isLoading }) {
 
         <Button
           variant="outline"
-          className="hidden h-8 w-8 p-0 lg:flex text-slate-600"
+          className="hidden h-8 w-8 p-0 lg:flex text-slate-500 hover:text-slate-800"
           onClick={() => setPage(last_page)}
           disabled={current_page === last_page}
         >

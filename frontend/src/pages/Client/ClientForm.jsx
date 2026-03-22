@@ -32,7 +32,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
         {trigger ? (
           trigger
         ) : (
-          <CustomButton icon={Plus} variant="default" className="bg-slate-700">
+          <CustomButton icon={Plus} variant="default">
             Nuevo Socio
           </CustomButton>
         )}
