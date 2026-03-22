@@ -57,7 +57,7 @@ class ClientController extends Controller
             $client = $this->clientService->createClient($request->validated());
 
             return (new ClientResource($client))
-                ->additional(['message' => 'Cliente creado exitosamente!'])
+                ->additional(['message' => $client->name.' ahora es socio!'])
                 ->response()
                 ->setStatusCode(201);
         } catch (\Exception $e) {
@@ -82,7 +82,7 @@ class ClientController extends Controller
             $this->clientService->updateClient($request->validated(), $client);
 
             return (new ClientResource($client))
-                ->additional(['message' => 'Cliente actualizado exitosamente!']);
+                ->additional(['message' => 'Información de ' . $client->name . ' actualizada exitosamente!']);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error al actualizar el cliente', 'error' => $e->getMessage()], 500);
         }
@@ -93,8 +93,12 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        $client->delete();
+        try {
+            $client->delete();
 
-        return response()->json(['message' => 'Cliente eliminado correctamente']);
+            return response()->json(['message' => 'Cliente ' . $client->name . ' eliminado correctamente']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al eliminar el cliente', 'error' => $e->getMessage()], 500);
+        }
     }
 }
