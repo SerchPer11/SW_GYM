@@ -148,7 +148,7 @@ export default function ClientsList() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={5}
+                  colSpan={7}
                   className="h-24 text-center text-slate-500"
                 >
                   No se encontraron clientes registrados.
