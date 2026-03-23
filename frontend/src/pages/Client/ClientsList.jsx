@@ -37,7 +37,7 @@ export default function ClientsList() {
   } = useCrud("users/clients", "Socio");
 
   return (
-    <div>
+    <CardBox>
       <PageHeader
         title="Gestionar Socios"
         description="Administra la información de los socios y sus membresías."
@@ -51,34 +51,35 @@ export default function ClientsList() {
           setStatusFilter={setStatusFilter}
           perPage={perPage}
           setPerPage={setPerPage}
+          hasIsActive
         />
         <CardBox
-          variant="pressed"
+          variant="elevated"
           className="p-0 overflow-hidden flex flex-col"
         >
           <div className="overflow-x-auto">
             <Table className="md:table-auto w-full">
-              <TableHeader className="bg-transparent border-b border-slate-200/70">
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="w-[80px] text-slate-400 font-semibold text-xs uppercase tracking-wider text-center h-12">
+              <TableHeader className="bg-slate-500/20 border-b-2 border-slate-400/70">
+                <TableRow className="hover:bg-transparent border-2 border-slate-300/70">
+                  <TableHead className="w-[80px] text-slate-600 font-semibold text-xs uppercase tracking-wider text-center h-12 border-r-2 border-slate-300/70">
                     ID
                   </TableHead>
-                  <TableHead className="text-slate-400 font-semibold text-xs uppercase tracking-wider text-center">
+                  <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center h-12 border-r-2 border-slate-300/70">
                     Nombre
                   </TableHead>
-                  <TableHead className="text-slate-400 font-semibold text-xs uppercase tracking-wider text-center">
+                  <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center h-12 border-r-2 border-slate-300/70">
                     Correo
                   </TableHead>
-                  <TableHead className="text-slate-400 font-semibold text-xs uppercase tracking-wider text-center">
+                  <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center h-12 border-r-2 border-slate-300/70">
                     Teléfono
                   </TableHead>
-                  <TableHead className="text-slate-400 font-semibold text-xs uppercase tracking-wider text-center">
+                  <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center h-12 border-r-2 border-slate-300/70">
                     Inscripción
                   </TableHead>
-                  <TableHead className="text-slate-400 font-semibold text-xs uppercase tracking-wider text-center">
+                  <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center h-12 border-r-2 border-slate-300/70">
                     Estado
                   </TableHead>
-                  <TableHead className="text-slate-400 font-semibold text-xs uppercase tracking-wider text-center">
+                  <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center h-12 border-r-2 border-slate-300/70">
                     Acciones
                   </TableHead>
                 </TableRow>
@@ -88,47 +89,44 @@ export default function ClientsList() {
                   <TableSkeleton length={5} columns={7} />
                 ) : clients.length > 0 ? (
                   clients.map((client) => (
-                    // 🌟 FILAS: Hover que se ilumina (blanco translúcido) en lugar de oscurecerse
                     <TableRow
                       key={client.id}
-                      className="hover:bg-white/60 transition-colors border-b border-slate-200/50"
+                      className="hover:bg-white/60 transition-colors border-b border-slate-400/70"
                     >
-                      <TableCell className="font-medium text-slate-400 text-center">
+                      <TableCell className="font-medium text-slate-400 text-center border-2 border-slate-300/70">
                         #{client.id}
                       </TableCell>
-                      <TableCell className="text-slate-600 font-medium text-center">
+                      <TableCell className="text-slate-600 font-medium text-center border-2 border-slate-300/70">
                         {client.user?.full_name || "N/A"}
                       </TableCell>
-                      <TableCell className="text-slate-500 text-center">
+                      <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
                         {client.user?.email || "N/A"}
                       </TableCell>
-                      <TableCell className="text-slate-500 text-center">
+                      <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
                         {client.phone || "N/A"}
                       </TableCell>
-                      <TableCell className="text-slate-500 text-center">
+                      <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
                         {client.inscription_date
                           ? client.inscription_date?.human
                           : "Sin fecha"}
                       </TableCell>
-                      <TableCell className="text-center">
-                        {/* Píldoras de estado con colores suaves */}
+                      <TableCell className="text-center border-2 border-slate-300/70">
                         <span
                           className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm ${
                             client.status === 1
-                              ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
-                              : "bg-rose-50 text-rose-600 border border-rose-100"
+                              ? "bg-emerald-100 text-emerald-600 border border-emerald-200"
+                              : "bg-rose-100 text-rose-600 border border-rose-200"
                           }`}
                         >
                           {client.status === 1 ? "Activo" : "Inactivo"}
                         </span>
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center border-2 border-slate-300/70">
                         <div className="flex justify-center gap-2">
                           <ClientForm
                             client={client}
                             onSuccess={fetchClients}
                             trigger={
-                              // 🌟 BOTONES: Ligeramente elevados (bg-white shadow-sm) para que destaquen del hueco
                               <Button
                                 variant="outline"
                                 size="icon"
@@ -169,11 +167,12 @@ export default function ClientsList() {
             </Table>
           </div>
 
-            <Pagination
-              meta={meta}
-              page={page}
-              setPage={setPage}
-              isLoading={isLoading}/>
+          <Pagination
+            meta={meta}
+            page={page}
+            setPage={setPage}
+            isLoading={isLoading}
+          />
         </CardBox>
 
         <ConfirmDialog
@@ -187,6 +186,6 @@ export default function ClientsList() {
           variant="destructive"
         />
       </CardBox>
-    </div>
+    </CardBox>
   );
 }

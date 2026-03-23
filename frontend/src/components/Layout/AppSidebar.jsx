@@ -57,7 +57,7 @@ export default function AppSidebar() {
               className="bg-transparent hover:bg-slate-800/50 transition-colors"
               tooltip="Inicio"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-emerald-500">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-blue-500 hover:text-blue-500/20 transition-colors hover:bg-slate-800/50">
                 <Dumbbell className="size-5" />
               </div>
               <div className="ml-2 hidden text-sm font-semibold md:block">
@@ -84,7 +84,7 @@ export default function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      className="text-slate-400 font-medium hover:bg-slate-800/50 hover:text-slate-200 data-[active=true]:bg-slate-950 data-[active=true]:text-emerald-500 data-[active=true]:shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)] transition-all rounded-xl"
+                      className="text-slate-400 font-medium hover:bg-slate-800/50 hover:text-blue-500/20 data-[active=true]:bg-slate-950 data-[active=true]:text-blue-500 data-[active=true]:shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)] transition-all rounded-xl"
                       tooltip={item.title}
                     >
                       <Link to={item.url}>
@@ -114,7 +114,7 @@ export default function AppSidebar() {
                         <SidebarMenuButton
                           tooltip={item.title}
                           isActive={hasActiveSubItem}
-                          className="text-slate-400 font-medium hover:bg-slate-800/50 hover:text-slate-200 transition-all rounded-xl data-[active=true]:bg-slate-950 data-[active=true]:text-emerald-500 data-[active=true]:shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)]"
+                          className="text-slate-400 font-medium hover:bg-slate-800/50 hover:text-blue-500/20 transition-all rounded-xl data-[active=true]:bg-slate-950 data-[active=true]:text-blue-500 data-[active=true]:shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)]"
                         >
                           <item.icon />
                           <span>{item.title}</span>
@@ -132,7 +132,7 @@ export default function AppSidebar() {
                                 <SidebarMenuSubButton
                                   asChild
                                   isActive={isSubActive}
-                                  className="text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 data-[active=true]:bg-slate-950/80 data-[active=true]:text-emerald-500 data-[active=true]:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)] transition-all rounded-lg my-0.5"
+                                  className="text-slate-400 hover:text-blue-500/20 hover:bg-slate-800/50 data-[active=true]:bg-slate-950/80 data-[active=true]:text-blue-500 data-[active=true]:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)] transition-all rounded-lg my-0.5"
                                 >
                                   <Link to={subItem.url}>
                                     <span>{subItem.title}</span>
@@ -160,10 +160,10 @@ export default function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="w-full bg-slate-950 shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)] hover:bg-slate-950/90 text-slate-300 hover:text-white transition-all rounded-xl p-2 h-auto data-[state=open]:bg-slate-950"
+                  className="w-full bg-slate-950 shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)] hover:bg-slate-800/50 text-slate-300 hover:text-white transition-all rounded-xl p-2 h-auto data-[state=open]:bg-slate-800/50"
                     tooltip={`${user?.name} ${user?.lastname}`}
                 >
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-emerald-500">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-blue-500 hover:text-blue-500/20 transition-colors data-[state=open]:text-blue-500/20">
                     <span className="font-bold text-lg uppercase">
                       {user?.name?.charAt(0) || "U"}
                     </span>
@@ -187,7 +187,7 @@ export default function AppSidebar() {
               >
                 <DropdownMenuLabel className="p-0 font-normal mb-2">
                   <div className="flex items-center gap-3 px-2 py-1.5 text-left text-sm">
-                    <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-slate-700 text-emerald-400 shadow-sm">
+                    <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-slate-700 text-blue-500 shadow-sm">
                       <span className="font-bold uppercase">
                         {user?.name?.charAt(0) || "U"}
                       </span>

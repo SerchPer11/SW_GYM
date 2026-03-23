@@ -5,17 +5,25 @@ import { Dumbbell } from "lucide-react";
 
 const Layout = lazy(() => import("@/components/Layout/Layout"));
 const ProtectedRoute = lazy(() => import("@/components/Layout/ProtectedRoute"));
-const PermissionRoute = lazy(() => import("@/components/Layout/PermissionRoute"));
+const PermissionRoute = lazy(
+  () => import("@/components/Layout/PermissionRoute"),
+);
 const ClientsList = lazy(() => import("@/pages/Client/ClientsList"));
 const LoginForm = lazy(() => import("@/pages/Auth/LoginForm"));
+const ModulesList = lazy(() => import("@/pages/Security/Modules/ModulesList"));
 
 function App() {
   const { user } = useAuth();
 
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-100 text-slate-700 text-lg font-medium gap-6 flex-col">
-        <Dumbbell className="animate-spin text-slate-500" size={48} />
-        Cargando pesos pesados...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-100 text-lg font-medium text-slate-500 font-medium gap-6 flex-col">
+          <Dumbbell className="animate-spin text-blue-500" size={48} />
+          Cargando pesos pesados...
+        </div>
+      }
+    >
       <Routes>
         <Route
           path="/login"
@@ -24,15 +32,25 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
-            <Route element={<PermissionRoute requiredPermission="clients.index" />}>
+            <Route
+              element={<PermissionRoute requiredPermission="clients.index" />}
+            >
               <Route path="users/clients" element={<ClientsList />} />
+            </Route>
+
+            <Route
+              element={<PermissionRoute requiredPermission="modules.index" />}
+            >
+              <Route path="security/modules" element={<ModulesList />} />
             </Route>
 
             <Route
               path="/"
               element={
                 <div className="p-8">
-                  <h1 className="text-2xl font-bold">Bienvenido al Dashboard</h1>
+                  <h1 className="text-2xl font-bold">
+                    Bienvenido al Dashboard
+                  </h1>
                 </div>
               }
             />

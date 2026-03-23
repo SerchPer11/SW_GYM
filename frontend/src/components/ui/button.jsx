@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-slate-900 text-white border border-slate-950 shadow-[0_2px_8px_rgba(15,23,42,0.3),inset_0_1px_0_rgba(255,255,255,0.15)] hover:bg-slate-800 hover:shadow-[0_4px_12px_rgba(15,23,42,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]",
+          "bg-slate-800/90 text-slate-200 border border-slate-700 shadow-[0_2px_8px_rgba(15,23,42,0.3),inset_0_1px_0_rgba(255,255,255,0.15)] hover:bg-slate-800/80 hover:shadow-[0_4px_12px_rgba(15,23,42,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]",
         
         destructive:
           "bg-rose-600 text-white border border-rose-700 shadow-[0_2px_8px_rgba(225,29,72,0.3),inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-rose-500 hover:shadow-[0_4px_12px_rgba(225,29,72,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]",

@@ -8,7 +8,7 @@ export default function TableSkeleton({length = 5, columns = 5}) {
       className="hover:bg-transparent border-b border-slate-200"
     >
       {Array.from({ length: columns }).map((_, colIndex) => (
-        <TableCell key={colIndex} className="text-center justify-center">
+        <TableCell key={colIndex} className="text-center justify-center border-2 border-slate-300/70">
           <Skeleton className="h-4 w-full" />
         </TableCell>
       ))}

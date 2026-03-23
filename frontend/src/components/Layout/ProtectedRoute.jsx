@@ -8,8 +8,8 @@ export default function ProtectedRoute() {
   // Mientras verificamos el token con Laravel, mostramos una pantalla de carga
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-100 text-slate-700 text-lg font-medium gap-6 flex-col">
-        <Dumbbell className="animate-spin text-slate-500" size={48} />
+      <div className="min-h-screen flex items-center justify-center bg-slate-100 font-medium text-slate-500 text-lg font-medium gap-6 flex-col">
+        <Dumbbell className="animate-spin text-blue-500" size={48} />
         Cargando pesos pesados...</div>
     );
   }

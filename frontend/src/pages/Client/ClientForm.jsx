@@ -11,6 +11,7 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { CardBox } from "@/components/common/CardBox";
 
 export default function ClientForm({ client, onSuccess, trigger }) {
   const { isOpen, openModal, closeModal } = useModal();
@@ -38,7 +39,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px]">
-        <DialogHeader>
+        <DialogHeader class="px-4">
           <DialogTitle className="text-xl font-bold">
             {isEditMode ? "Editar Socio" : "Registrar Nuevo Socio"}
           </DialogTitle>
@@ -48,7 +49,9 @@ export default function ClientForm({ client, onSuccess, trigger }) {
               : "Completa el formulario para registrar un nuevo socio."}
           </DialogDescription>
         </DialogHeader>
+        
         <form onSubmit={handleSubmit} className="space-y-1" noValidate>
+          <CardBox variant="elevated">
           <div className="grid grid-cols-2 gap-4">
             <FormInput
               label="Nombre"
@@ -117,6 +120,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
               error={errors.expiration_date?.[0]}
             />
           </div>
+          </CardBox>
 
           <CustomButton
             variant="default"

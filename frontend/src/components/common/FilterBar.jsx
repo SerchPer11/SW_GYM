@@ -16,6 +16,7 @@ export default function FilterBar({
   setStatusFilter,
   perPage,
   setPerPage,
+  hasIsActive = false,
 }) {
   return (
     <CardBox className="mb-6 p-3" variant="pressed">
@@ -41,20 +42,19 @@ export default function FilterBar({
           </Select>
         </div>
         <div className="flex flex-wrap sm:flex-row items-center gap-3 w-full sm:w-auto">
-          
           <div className="relative w-full sm:w-72 group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
             <Input
               placeholder="Buscar socio por nombre, correo..."
-              className="pl-9 pr-10 w-full bg-white border-0 shadow-sm focus-visible:ring-2 focus-visible:ring-blue-400/50 rounded-lg transition-all text-slate-700 placeholder:text-slate-400"
+              className="pl-9 pr-10 w-full bg-white border-1 shadow-sm focus-visible:ring-2 focus-visible:ring-blue-500/20 rounded-lg transition-all text-slate-700 placeholder:text-slate-500"
               value={filters.search}
               onChange={(e) =>
                 setFilters({ ...filters, search: e.target.value })
               }
             />
-            
+
             {filters.search && (
-              <div 
+              <div
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-slate-100 cursor-pointer text-slate-400 hover:text-rose-500 transition-colors"
                 onClick={() => setFilters({ ...filters, search: "" })}
                 title="Limpiar búsqueda"
@@ -63,18 +63,18 @@ export default function FilterBar({
               </div>
             )}
           </div>
-
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-[150px] bg-white border-0 shadow-sm focus:ring-2 focus:ring-slate-400 rounded-lg transition-all font-medium text-slate-700">
-              <SelectValue placeholder="Estado" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-slate-200 shadow-lg">
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="1">Activos</SelectItem>
-              <SelectItem value="0">Inactivos</SelectItem>
-            </SelectContent>
-          </Select>
-          
+          {hasIsActive && (
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full sm:w-[150px] bg-white border-0 shadow-sm focus:ring-2 focus:ring-slate-400 rounded-lg transition-all font-medium text-slate-700">
+                <SelectValue placeholder="Estado" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-slate-200 shadow-lg">
+                <SelectItem value="all">Todos</SelectItem>
+                <SelectItem value="1">Activos</SelectItem>
+                <SelectItem value="0">Inactivos</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </div>
     </CardBox>
