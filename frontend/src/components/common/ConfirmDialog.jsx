@@ -8,8 +8,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Check, Loader2, X } from "lucide-react";
 
 export default function ConfirmDialog({
+  isLoading,
   isOpen,
   onClose,
   onConfirm,
@@ -27,9 +29,18 @@ export default function ConfirmDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onClose}
-          className="bg-slate-100 hover:bg-slate-200 text-slate-700"
-          >{cancelText}</AlertDialogCancel>
+          <AlertDialogCancel
+            onClick={onClose}
+            className="bg-slate-100 hover:bg-slate-200 text-slate-700"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <X className="h-4 w-4" />
+            )}
+            {isLoading ? "Procesando..." : cancelText}
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
@@ -37,11 +48,17 @@ export default function ConfirmDialog({
             }}
             className={
               variant === "destructive"
-                ? "bg-rose-600 hover:bg-rose-700 text-white"
+                ? "bg-rose-600 hover:bg-rose-700 text-white border-rose-700"
                 : "bg-slate-900 hover:bg-slate-800 text-white"
             }
+            disabled={isLoading}
           >
-            {confirmText}
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Check className="h-4 w-4" />
+            )}
+            {isLoading ? "Procesando..." : confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

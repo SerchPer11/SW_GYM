@@ -60,7 +60,7 @@ export default function AppSidebar() {
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-blue-500 hover:text-blue-500/20 transition-colors hover:bg-slate-800/50">
                 <Dumbbell className="size-5" />
               </div>
-              <div className="ml-2 hidden text-sm font-semibold md:block">
+              <div className="ml-2 text-sm font-semibold md:block">
                 <span className="font-bold text-slate-100 tracking-wide">
                   GymManager
                 </span>
@@ -160,10 +160,10 @@ export default function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="w-full bg-slate-950 shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)] hover:bg-slate-800/50 text-slate-300 hover:text-white transition-all rounded-xl p-2 h-auto data-[state=open]:bg-slate-800/50"
+                  className="w-full bg-slate-900 shadow-[inset_2px_3px_6px_rgba(0,0,0,0.6),inset_-1px_-1px_2px_rgba(255,255,255,0.03)] hover:bg-slate-800/50 text-slate-300 hover:text-white transition-all rounded-xl p-2 h-auto data-[state=open]:bg-slate-800/90"
                     tooltip={`${user?.name} ${user?.lastname}`}
                 >
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-blue-500 hover:text-blue-500/20 transition-colors data-[state=open]:text-blue-500/20">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-blue-500 hover:text-blue-500/20 transition-colors hover:bg-slate-800/50 data-[state=open]:bg-slate-800/90">
                     <span className="font-bold text-lg uppercase">
                       {user?.name?.charAt(0) || "U"}
                     </span>
@@ -187,8 +187,8 @@ export default function AppSidebar() {
               >
                 <DropdownMenuLabel className="p-0 font-normal mb-2">
                   <div className="flex items-center gap-3 px-2 py-1.5 text-left text-sm">
-                    <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-slate-700 text-blue-500 shadow-sm">
-                      <span className="font-bold uppercase">
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-slate-800/80 shadow-[2px_2px_4px_rgba(0,0,0,0.5),-1px_-1px_2px_rgba(255,255,255,0.08)] text-blue-500 hover:text-blue-500/20 transition-colors hover:bg-slate-800/50 data-[state=open]:bg-slate-800/90">
+                      <span className="font-bold text-lg uppercase">
                         {user?.name?.charAt(0) || "U"}
                       </span>
                     </div>

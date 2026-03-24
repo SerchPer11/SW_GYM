@@ -31,7 +31,7 @@ export default function Pagination({ page, setPage, meta, isLoading }) {
   const { current_page, last_page, total, from, to } = meta;
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 border-t-2 border-slate-200/70 bg-transparent mt-2">
+    <div className="flex items-center justify-between px-4 py-2 border-t-2 border-slate-200/70 bg-transparent mt-2 sm:flex-row flex-col gap-2">
       <div className="flex-1 text-sm text-slate-500">
         Mostrando del{" "}
         <span className="font-semibold text-slate-700">{from || 0}</span> al{" "}

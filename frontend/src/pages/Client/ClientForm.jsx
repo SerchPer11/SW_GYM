@@ -100,6 +100,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
                 { value: "female", label: "Femenino" },
                 { value: "other", label: "Otro" }
               ]}
+              required
             />
           </div>
 
@@ -111,6 +112,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
               defaultValue={client?.inscription_date?.raw || new Date().toISOString().split("T")[0]}
               error={errors.inscription_date?.[0]}
               disabled={isEditMode}
+              required
             />
             <FormInput
               label="Vencimiento"
@@ -118,6 +120,7 @@ export default function ClientForm({ client, onSuccess, trigger }) {
               type="date"
               defaultValue={client?.expiration_date?.raw}
               error={errors.expiration_date?.[0]}
+              disabled={!isEditMode}
             />
           </div>
           </CardBox>

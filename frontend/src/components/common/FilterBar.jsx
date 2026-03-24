@@ -19,10 +19,9 @@ export default function FilterBar({
   hasIsActive = false,
 }) {
   return (
-    <CardBox className="mb-6 p-3" variant="pressed">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <span className="text-sm font-medium text-slate-500 hidden sm:inline-block">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 p-4">
+        <div className="flex items-center gap-3 w-full sm:w-auto sm:flex-row flex-col">
+          <span className="text-sm font-medium text-slate-500 sm:inline-block">
             Mostrar
           </span>
           <Select
@@ -77,6 +76,5 @@ export default function FilterBar({
           )}
         </div>
       </div>
-    </CardBox>
   );
 }

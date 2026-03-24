@@ -1,40 +1,46 @@
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-export default function FormInput({ 
-  label, 
-  error, 
-  name, 
+export default function FormInput({
+  label,
+  required = false,
+  error,
+  name,
   type = "text",
   options = [],
   placeholder,
-  ...props 
+  ...props
 }) {
-  const errorClass = error ? "border-red-500 focus-visible:ring-red-500" : "border-slate-200";
+  const errorClass = error
+    ? "border-red-500 focus-visible:ring-red-500"
+    : "border-slate-200";
 
   // Renderizar según el tipo
   const renderInput = () => {
     switch (type) {
       case "select":
         return (
-          <Select name={name} defaultValue={props.defaultValue} onValueChange={props.onChange}>
+          <Select
+            name={name}
+            defaultValue={props.defaultValue}
+            onValueChange={props.onChange}
+          >
             <SelectTrigger className={errorClass}>
-              <SelectValue placeholder={placeholder || "Selecciona una opción"} />
+              <SelectValue
+                placeholder={placeholder || "Selecciona una opción"}
+              />
             </SelectTrigger>
             <SelectContent>
               {options.map((option) => (
-                <SelectItem 
-                  key={option.value} 
-                  value={option.value?.toString()}
-                >
+                <SelectItem key={option.value} value={option.value?.toString()}>
                   {option.label}
                 </SelectItem>
               ))}
@@ -81,13 +87,18 @@ export default function FormInput({
 
   return (
     <div className="grid w-full items-center gap-1.5 mb-4 text-left">
-      {label && (
-        <Label htmlFor={name} className="text-slate-700 font-semibold">
-          {label}
-        </Label>
-      )}
+      <div className="flex items-center gap-1">
+        {label && (
+          <Label htmlFor={name} className="text-slate-700 font-semibold">
+            {label}
+          </Label>
+        )}
+        {required && <span className="text-red-500">*</span>}
+      </div>
       {renderInput()}
-      {error && <p className="text-xs font-medium text-red-500 mt-1">{error}</p>}
+      {error && (
+        <p className="text-xs font-medium text-red-500 mt-1">{error}</p>
+      )}
     </div>
   );
 }

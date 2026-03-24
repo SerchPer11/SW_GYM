@@ -6,14 +6,15 @@ export default function CustomButton({
   icon: Icon, 
   variant = "default", 
   isLoading = false, 
+  disabled = false,
   className = "",
   ...props 
 }) {
   return (
     <Button 
       variant={variant} 
-      disabled={isLoading} 
-      className={`gap-2 ${className}`} 
+      disabled={isLoading || disabled}
+      className={`gap-2 ${className} ${isLoading ? "cursor-wait" : ""}`}
       {...props}
     >
       {isLoading ? (
@@ -21,7 +22,7 @@ export default function CustomButton({
       ) : (
         Icon && <Icon className="h-4 w-4" />
       )}
-      {children}
+      {isLoading ? "Procesando..." : children}
     </Button>
   )
 }
