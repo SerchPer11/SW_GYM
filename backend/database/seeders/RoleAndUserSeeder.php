@@ -28,7 +28,7 @@ class RoleAndUserSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
         // Create the 'clients' module and its permissions
-        Module::create(['name' => 'clients', 'description' => 'Módulo de clientes', 'key' => 'clients', 'user_id' => 1]);
+        Module::create(['name' => 'Clientes', 'description' => 'Módulo de clientes', 'key' => 'clients', 'user_id' => 1]);
 
         Permission::create(['name' => 'clients.index', 'guard_name' => 'web', 'description' => 'Permiso para listar clientes', 'module_key' => 'clients']);
         Permission::create(['name' => 'clients.create', 'guard_name' => 'web', 'description' => 'Permiso para crear clientes', 'module_key' => 'clients']);

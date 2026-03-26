@@ -11,11 +11,6 @@ use App\Http\Controllers\Security\PermissionController;
 //Api public routes
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::prefix('security')->group(function () {
-        Route::apiResource('modules', ModuleController::class);
-        Route::apiResource('roles', RoleController::class);
-        Route::apiResource('permissions', PermissionController::class);
-    });
 //Api protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Auth routes
@@ -23,7 +18,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
     // Security routes
-    
+    Route::prefix('security')->group(function () {
+        Route::apiResource('modules', ModuleController::class);
+        Route::apiResource('roles', RoleController::class);
+        Route::apiResource('permissions', PermissionController::class);
+    });
 
     // Users routes
     Route::prefix('users')->group(function () {

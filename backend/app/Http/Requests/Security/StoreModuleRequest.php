@@ -23,7 +23,7 @@ class StoreModuleRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255,', 'unique:modules,name'],
-            'description' => ['nullable', 'string'],
+            'description' => ['required', 'string'],
             'key' => ['required', 'string', 'max:255', 'unique:modules,key'],
         ];
     }
