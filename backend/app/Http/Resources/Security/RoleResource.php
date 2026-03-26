@@ -5,9 +5,11 @@ namespace App\Http\Resources\Security;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Security\PermissionResource;
+use App\Traits\DateFormat;
 
 class RoleResource extends JsonResource
 {
+    use DateFormat;
     /**
      * Transform the resource into an array.
      *
@@ -21,8 +23,8 @@ class RoleResource extends JsonResource
             'description' => $this->description,
             'guard_name' => $this->guard_name,
             'permissions'   => PermissionResource::collection($this->whenLoaded('permissions')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->textFormatDate($this->created_at),
+            'updated_at' => $this->textFormatDate($this->updated_at),
         ];
     }
 }
