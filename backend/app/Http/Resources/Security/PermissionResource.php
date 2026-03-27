@@ -4,9 +4,11 @@ namespace App\Http\Resources\Security;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Traits\DateFormat;
 
 class PermissionResource extends JsonResource
 {
+    use DateFormat;
     /**
      * Transform the resource into an array.
      *
@@ -20,6 +22,8 @@ class PermissionResource extends JsonResource
             'description' => $this->description,
             'guard_name' => $this->guard_name,
             'module_key' => $this->module_key,
+            'created_at' => $this->textFormatDate($this->created_at),
+            'updated_at' => $this->textFormatDate($this->updated_at),
         ];
     }
 }

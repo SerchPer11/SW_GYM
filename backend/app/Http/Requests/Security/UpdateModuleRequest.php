@@ -23,7 +23,7 @@ class UpdateModuleRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255', 'unique:modules,name,' . $this->module->id],
-            'description' => ['nullable', 'string'],
+            'description' => ['required', 'string'],
             'key' => ['required', 'string', 'max:255', 'unique:modules,key,' . $this->module->id],
         ];
     }
