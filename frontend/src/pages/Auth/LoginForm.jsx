@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/Context/AuthContext";
 import FormInput from "@/components/common/FormInput";
 import CustomButton from "@/components/common/CustomButton";
 import { Lock, Mail, LogIn } from "lucide-react";
@@ -17,7 +17,7 @@ export default function LoginForm() {
   const [errors, setErrors] = useState(null);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     setIsLoading(true);
     setErrors(null);
 

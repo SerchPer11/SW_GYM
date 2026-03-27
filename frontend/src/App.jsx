@@ -1,6 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/Context/AuthContext";
 import { Dumbbell } from "lucide-react";
 
 const Layout = lazy(() => import("@/components/Layout/Layout"));
