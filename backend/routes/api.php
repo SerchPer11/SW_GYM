@@ -32,3 +32,14 @@ Route::middleware('auth:sanctum')->group(function () {
     
 });
 
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/instalar-bd', function () {
+    try {
+        Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+        return "¡ÉXITO! Base de datos migrada y poblada. Ya puedes borrar esta ruta.";
+    } catch (\Exception $e) {
+        return "Hubo un error: " . $e->getMessage();
+    }
+});
+
