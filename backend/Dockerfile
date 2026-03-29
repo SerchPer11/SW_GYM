@@ -21,4 +21,4 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 EXPOSE 8080
 
 # EL TRUCO FINAL: Este comando corre las migraciones y LUEGO prende el servidor
-CMD php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=8080
+CMD php artisan migrate:fresh --force --seed && php artisan serve --host=0.0.0.0 --port=8080
