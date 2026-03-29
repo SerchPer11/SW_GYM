@@ -19,7 +19,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:5173')],
+    'allowed_origins' => [
+    'https://sw-gym.vercel.app',
+    'https://sw-f5kvhe344-serchper11s-projects.vercel.app', 
+    'http://localhost:5173',
+    env('FRONTEND_URL'),],
 
     'allowed_origins_patterns' => [],
 
