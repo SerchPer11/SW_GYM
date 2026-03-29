@@ -51,6 +51,13 @@ export default function ClientForm({ client, onSuccess, trigger }) {
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-1" noValidate>
+          {isEditMode && (
+            <input
+              type="hidden"
+              name="inscription_date"
+              value={client?.inscription_date || ""}
+            />
+          )}
           <CardBox variant="elevated">
           <div className="grid grid-cols-2 gap-4">
             <FormInput
@@ -109,16 +116,16 @@ export default function ClientForm({ client, onSuccess, trigger }) {
               label="Inscripción"
               name="inscription_date"
               type="date"
-              defaultValue={client?.inscription_date?.raw || new Date().toISOString().split("T")[0]}
+              defaultValue={client?.inscription_date || new Date().toISOString().split("T")[0]}
               error={errors.inscription_date?.[0]}
               disabled={isEditMode}
-              required
+              required={!isEditMode}
             />
             <FormInput
               label="Vencimiento"
               name="expiration_date"
               type="date"
-              defaultValue={client?.expiration_date?.raw}
+              defaultValue={client?.expiration_date}
               error={errors.expiration_date?.[0]}
               disabled={!isEditMode}
             />

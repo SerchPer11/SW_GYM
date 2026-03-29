@@ -59,7 +59,19 @@ export function useCrud(endpoint, resourceName = 'register') {
             fetchData();
             return true;
         } catch (error) {
-            toast.error(`Error al crear ${resourceName}.`);
+            if (error.response) {
+                toast.error(`Error al crear ${resourceName}.`);
+            }
+
+            else if (error.request) {
+                console.error("No se recibió respuesta del servidor.");
+                toast.error("No se recibió respuesta del servidor. Por favor, inténtalo de nuevo más tarde.");
+            }
+
+            else {
+                console.error("Error de configuración:", error.message);
+                toast.error("Error de configuración. Por favor, inténtalo de nuevo más tarde.");
+            }
             setErrors(error.response.data.errors);
             return false;
         } finally {

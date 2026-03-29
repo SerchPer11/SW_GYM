@@ -9,7 +9,6 @@ use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
 use Illuminate\Http\Request;
-
 class ClientController extends Controller
 {
     protected ClientService $clientService;
@@ -55,9 +54,9 @@ class ClientController extends Controller
     {
         try {
             $client = $this->clientService->createClient($request->validated());
-
+            
             return (new ClientResource($client))
-                ->additional(['message' => $client->name.' ahora es socio!'])
+                ->additional(['message' => $client->name . ' ahora es socio!'])
                 ->response()
                 ->setStatusCode(201);
         } catch (\Exception $e) {

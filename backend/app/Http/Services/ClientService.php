@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Users\User;
-use App\Models\users\Client;
+use App\Models\Users\Client;
 use Illuminate\Support\Facades\DB;
 
 class ClientService
@@ -26,9 +26,8 @@ class ClientService
             ]);
             return Client::create([
                 'user_id' => $user->id,
-                'phone' => $validated['phone'],
-                'inscription_date' => $validated['inscription_date'],
-                'expiration_date' => $validated['expiration_date'],
+                'phone' => $validated['phone'] ?? null,
+                'inscription_date' => $validated['inscription_date'] ?? now()->toDateString(),
                 'is_active' => $validated['is_active'] ?? true,
             ]);
         });
@@ -45,9 +44,11 @@ class ClientService
             ]);
 
             $client->update([
-                'phone' => $validated['phone'],
-                'inscription_date' => $validated['inscription_date'],
-                'expiration_date' => $validated['expiration_date'],
+                'phone' => $validated['phone'] ?? $client->phone,
+                'inscription_date' => $validated['inscription_date'] ?? $client->inscription_date,
+                'expiration_date' => array_key_exists('expiration_date', $validated)
+                    ? $validated['expiration_date']
+                    : $client->expiration_date,
                 'is_active' => $validated['is_active'] ?? $client->is_active,
             ]);
         });

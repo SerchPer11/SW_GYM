@@ -21,8 +21,7 @@ return [
 
     'allowed_origins' => [
     'https://sw-gym.vercel.app',
-    'https://sw-f5kvhe344-serchper11s-projects.vercel.app', 
-    'http://localhost:5173',
+    'http://localhost:5174',
     env('FRONTEND_URL'),],
 
     'allowed_origins_patterns' => [],

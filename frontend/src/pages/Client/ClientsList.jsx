@@ -103,7 +103,7 @@ export default function ClientsList() {
                     </TableCell>
                     <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
                       {client.inscription_date
-                        ? client.inscription_date?.human
+                        ? client.inscription_date_formatted?.human
                         : "Sin fecha"}
                     </TableCell>
                     <TableCell className="text-center border-2 border-slate-300/70">
