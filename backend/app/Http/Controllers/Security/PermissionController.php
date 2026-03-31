@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Security;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Security\StorePermissionRequest;
+use App\Http\Requests\Security\UpdatePermissionRequest;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use App\Http\Resources\Security\PermissionResource;
+use App\Models\Security\Module;
 
 class PermissionController extends Controller
 {
@@ -25,9 +27,10 @@ class PermissionController extends Controller
 
         $permissions = $query->orderBy('id', 'desc')->paginate($perPage);
 
-        return response()->json([
-            'permissions' => PermissionResource::collection($permissions),
-        ]);
+        return PermissionResource::collection($permissions)
+            ->additional([
+                'modules' => Module::orderBy('name')->get(['id', 'name', 'key']),
+            ]);
     }
 
     public function store (StorePermissionRequest $request)
@@ -44,7 +47,7 @@ class PermissionController extends Controller
         }
     }
 
-    public function update (StorePermissionRequest $request, Permission $permission) 
+    public function update (UpdatePermissionRequest $request, Permission $permission) 
     {
         try {
             $permission->update($request->validated());

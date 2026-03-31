@@ -2,21 +2,48 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { createCrudService } from "@/services/apiService";
 
-export function useCrud(endpoint, resourceName = 'register') {
+const DEFAULT_META = { current_page: 1, last_page: 1, total: 0 };
+const RESERVED_RESPONSE_KEYS = new Set(["data", "meta", "links"]);
+
+export function useCrud(endpoint, resourceName = 'register', options = {}) {
     const service = createCrudService(endpoint);
+    const { includeExtras = false, extraKeys = [] } = options;
 
     const [data, setData] = useState([]);
+    const [extras, setExtras] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [errors, setErrors] = useState({});
     const [page, setPage] = useState(1);
     const [perPage, setPerPage] = useState(5);
-    const [meta, setMeta] = useState({ current_page: 1, last_page: 1, total: 0 });
+    const [meta, setMeta] = useState(DEFAULT_META);
     const [confirmModal, setConfirmModal] = useState({ isOpen: false, clientId: null });
     const [filters, setFilters] = useState({
         search: "",
         status: ""
     });
     const [statusFilter, setStatusFilter] = useState("all");
+
+    const extractExtras = (response) => {
+        if (!includeExtras || !response || typeof response !== "object") {
+            return {};
+        }
+
+        if (Array.isArray(extraKeys) && extraKeys.length > 0) {
+            return extraKeys.reduce((acc, key) => {
+                if (Object.prototype.hasOwnProperty.call(response, key)) {
+                    acc[key] = response[key];
+                }
+                return acc;
+            }, {});
+        }
+
+        return Object.keys(response).reduce((acc, key) => {
+            if (!RESERVED_RESPONSE_KEYS.has(key)) {
+                acc[key] = response[key];
+            }
+            return acc;
+        }, {});
+    };
 
     const fetchData = async (currentPage = page, currentFilters = filters, currentPerPage = perPage, currentStatusFilter = statusFilter) => {
         setIsLoading(true);
@@ -29,7 +56,8 @@ export function useCrud(endpoint, resourceName = 'register') {
                 currentStatus: currentStatusFilter
             });
             setData(response.data);
-            setMeta(response.meta);
+            setMeta(response.meta || DEFAULT_META);
+            setExtras(extractExtras(response));
         } catch (error) {
             toast.error(`Error al cargar ${resourceName}s.`);
         } finally {
@@ -120,6 +148,6 @@ export function useCrud(endpoint, resourceName = 'register') {
         fetchData(1, filters, perPage, statusFilter);
     }, [perPage, filters, statusFilter]);
 
-    return { data, isLoading, page, setPage, perPage, setPerPage, filters, setFilters, statusFilter, setStatusFilter, meta, confirmModal, setConfirmModal, fetchData, getOne, create, update, remove, errors, setErrors };
+    return { data, extras, isLoading, page, setPage, perPage, setPerPage, filters, setFilters, statusFilter, setStatusFilter, meta, confirmModal, setConfirmModal, fetchData, getOne, create, update, remove, errors, setErrors };
 
 }

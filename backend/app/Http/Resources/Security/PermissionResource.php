@@ -22,8 +22,10 @@ class PermissionResource extends JsonResource
             'description' => $this->description,
             'guard_name' => $this->guard_name,
             'module_key' => $this->module_key,
-            'created_at' => $this->textFormatDate($this->created_at),
-            'updated_at' => $this->textFormatDate($this->updated_at),
+            'formatted_created_at' => $this->textFormatDate($this->created_at),
+            'formatted_updated_at' => $this->textFormatDate($this->updated_at),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

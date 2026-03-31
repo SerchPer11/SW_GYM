@@ -22,10 +22,10 @@ class StorePermissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:permissions,name'],
-            'description' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:150', 'unique:permissions,name'],
+            'description' => ['required', 'string', 'max:500'],
             'guard_name' => ['required', 'string', 'max:255'],
-            'module_key' => ['nullable', 'string', 'max:255'],
+            'module_key' => ['required', 'string', 'max:255'],
         ];
     }
 

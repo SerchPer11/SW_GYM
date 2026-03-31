@@ -11,6 +11,7 @@ const PermissionRoute = lazy(
 const ClientsList = lazy(() => import("@/pages/Client/ClientsList"));
 const LoginForm = lazy(() => import("@/pages/Auth/LoginForm"));
 const ModulesList = lazy(() => import("@/pages/Security/Modules/ModulesList"));
+const PermissionList = lazy(() => import("@/pages/Security/Permissions/PermissionList"));
 
 function App() {
   const { user } = useAuth();
@@ -32,18 +33,7 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
-            <Route
-              element={<PermissionRoute requiredPermission="clients.index" />}
-            >
-              <Route path="users/clients" element={<ClientsList />} />
-            </Route>
-
-            <Route
-              element={<PermissionRoute requiredPermission="modules.index" />}
-            >
-              <Route path="security/modules" element={<ModulesList />} />
-            </Route>
-
+            // DASHBOARD HOME
             <Route
               path="/"
               element={
@@ -54,6 +44,27 @@ function App() {
                 </div>
               }
             />
+            // SECURITY ROUTES // Modules
+            <Route
+              element={<PermissionRoute requiredPermission="modules.index" />}
+            >
+              <Route path="security/modules" element={<ModulesList />} />
+            </Route>
+            // Permissions
+            <Route
+              element={
+                <PermissionRoute requiredPermission="permissions.index" />
+              }
+            >
+              <Route path="security/permissions" element={<PermissionList />} />
+            </Route>
+
+            // USER ROUTES
+            <Route
+              element={<PermissionRoute requiredPermission="clients.index" />}
+            >
+              <Route path="users/clients" element={<ClientsList />} />
+            </Route>
           </Route>
         </Route>
 

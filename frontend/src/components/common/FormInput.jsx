@@ -96,9 +96,15 @@ export default function FormInput({
         {required && <span className="text-red-500">*</span>}
       </div>
       {renderInput()}
-      {error && (
-        <p className="text-xs font-medium text-red-500 mt-1">{error}</p>
-      )}
+      <div className="flex">
+        {error && (
+          <p className="text-xs font-medium text-red-500 mt-1">{error}</p>
+        )}
+
+        {type=== "textarea" && (<div className="text-xs text-slate-400 mt-1 ml-auto">
+          {props.maxLength ? `${props.maxLength} caracteres máximo` : ""}
+        </div>)}
+      </div>
     </div>
   );
 }
