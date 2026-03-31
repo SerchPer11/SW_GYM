@@ -76,7 +76,7 @@ export default function RolesList() {
             </TableHeader>
             <TableBody>
               {isLoading ? (
-                <TableSkeleton length={5} columns={5} />
+                <TableSkeleton length={5} columns={4} />
               ) : roles.length > 0 ? (
                 roles.map((role) => (
                   <TableRow

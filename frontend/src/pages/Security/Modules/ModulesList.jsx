@@ -85,10 +85,10 @@ export default function ModulesList() {
                     <TableCell className="font-medium text-slate-500 text-center border-2 border-slate-300/70">
                       #{module.id}
                     </TableCell>
-                    <TableCell className="text-slate-500 font-medium text-center border-2 border-slate-300/70">
+                    <TableCell className="text-slate-500 font-medium text-center border-2 border-slate-300/70 max-w-xs truncate">
                       {module.name || "N/A"}
                     </TableCell>
-                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
+                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70 max-w-xs truncate">
                       {module.description || "N/A"}
                     </TableCell>
                     <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">

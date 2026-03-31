@@ -66,7 +66,7 @@ export default function PermissionForm({
               <FormInput
                 label="Nombre"
                 name="name"
-                placeholder="Socios"
+                placeholder="permissions.create"
                 defaultValue={permission?.name}
                 error={errors.name?.[0]}
                 required

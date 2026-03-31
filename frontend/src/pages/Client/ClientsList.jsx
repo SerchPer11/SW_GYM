@@ -92,13 +92,13 @@ export default function ClientsList() {
                     <TableCell className="font-medium text-slate-400 text-center border-2 border-slate-300/70">
                       #{client.id}
                     </TableCell>
-                    <TableCell className="text-slate-600 font-medium text-center border-2 border-slate-300/70">
+                    <TableCell className="text-slate-600 font-medium text-center border-2 border-slate-300/70 max-w-xs truncate">
                       {client.user?.full_name || "N/A"}
                     </TableCell>
-                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
+                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70 max-w-xs truncate">
                       {client.user?.email || "N/A"}
                     </TableCell>
-                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
+                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70 max-w-xs truncate">
                       {client.phone || "N/A"}
                     </TableCell>
                     <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">

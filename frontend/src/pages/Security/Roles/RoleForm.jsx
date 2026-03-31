@@ -67,7 +67,7 @@ export default function RoleForm({
             <FormInput
               label="Nombre"
               name="name"
-              placeholder="Socios"
+              placeholder="Socio"
               defaultValue={role?.name}
               error={errors.name?.[0]}
               required

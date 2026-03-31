@@ -83,7 +83,7 @@ export default function PermissionList() {
             </TableHeader>
             <TableBody>
               {isLoading ? (
-                <TableSkeleton length={5} columns={5} />
+                <TableSkeleton length={5} columns={6} />
               ) : permissions?.length > 0 ? (
                 permissions.map((permission) => (
                   <TableRow
