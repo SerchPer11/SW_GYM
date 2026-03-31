@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\Security\StoreRoleRequest;
 use App\Http\Requests\Security\UpdateRoleRequest;
+use App\Models\Security\Module;
 
 class RoleController extends Controller
 {
@@ -28,16 +29,31 @@ class RoleController extends Controller
 
         $roles = $query->orderBy('id', 'desc')->paginate($perPage);
 
-        return response()->json([
-            'roles' =>RoleResource::collection($roles),
-            'permissions' => PermissionResource::collection(Permission::all())
-        ]);
+        return RoleResource::collection($roles)
+            ->additional([
+                'permissions' => Permission::orderBy('name')->get(['id', 'name', 'description', 'module_key']),
+                'modules' => Module::orderBy('name')->get(['id', 'name', 'key'])
+            ]);
     }
 
     public function store (StoreRoleRequest $request)
     {
         try {
-            $role = Role::create($request->validated());
+            $validatedData = $request->validated();
+            $permissionIds = $validatedData['permissions'] ?? [];
+            unset($validatedData['permissions']);
+
+            $selectedPermissions = Permission::whereIn('id', $permissionIds)->get();
+            $validatedData['guard_name'] = $validatedData['guard_name']
+                ?? ($selectedPermissions->first()->guard_name ?? config('auth.defaults.guard', 'web'));
+
+            $role = Role::create($validatedData);
+
+            $permissionsForRoleGuard = $selectedPermissions
+                ->where('guard_name', $role->guard_name)
+                ->values();
+
+            $role->syncPermissions($permissionsForRoleGuard);
 
             return (new RoleResource($role))
                 ->additional(['message' => 'Rol '. $role->name . ' creado exitosamente!'])
@@ -51,7 +67,17 @@ class RoleController extends Controller
     public function update (UpdateRoleRequest $request, Role $role) 
     {
         try {
-            $role->update($request->validated());
+            $validatedData = $request->validated();
+            $permissionIds = $validatedData['permissions'] ?? [];
+            unset($validatedData['permissions']);
+
+            $role->update($validatedData);
+
+            $permissionsForRoleGuard = Permission::whereIn('id', $permissionIds)
+                ->where('guard_name', $role->guard_name)
+                ->get();
+
+            $role->syncPermissions($permissionsForRoleGuard);
 
             return (new RoleResource($role))
                 ->additional(['message' => 'Rol '. $role->name . ' actualizado exitosamente!'])
@@ -66,6 +92,7 @@ class RoleController extends Controller
     {
         try {
             $name = $role->name;
+            $role->syncPermissions([]);
             $role->delete();
 
             return response()->json(['message' => 'Rol '. $name . ' eliminado exitosamente!'], 200);

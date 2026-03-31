@@ -25,7 +25,7 @@ class UpdateRoleRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', 'unique:roles,name,' . $this->role->id],
             'description' => ['required', 'string', 'max:255'],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string', 'exists:roles,id'],
+            'permissions.*' => ['string', 'exists:permissions,id'],
         ];
     }
 

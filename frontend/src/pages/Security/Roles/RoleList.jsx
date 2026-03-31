@@ -1,7 +1,7 @@
 import { CardBox } from "@/components/common/CardBox";
 import { useCrud } from "@/hooks/useCrud";
 import PageHeader from "@/components/common/PageHeader";
-import ModuleForm from "./ModuleForm";
+import RoleForm from "./RoleForm";
 import FilterBar from "@/components/common/FilterBar";
 import TableSkeleton from "@/components/common/TableSkeleton";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
@@ -17,9 +17,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export default function ModulesList() {
+export default function RolesList() {
   const {
-    data: modules,
+    data: roles,
+    extras: { permissions, modules } = {},
     isLoading,
     filters,
     setFilters,
@@ -32,16 +33,19 @@ export default function ModulesList() {
     meta,
     confirmModal,
     setConfirmModal,
-    fetchData: fetchModules,
+    fetchData: fetchroles,
     remove: handleDelete,
-  } = useCrud("security/modules", "Módulo");
+  } = useCrud("security/roles", "Rol", {
+    includeExtras: true,
+    extraKeys: ["permissions", "modules"],
+  });
 
   return (
     <CardBox>
       <PageHeader
-        title="Gestionar Módulos"
-        description="Administra la información de los módulos del sistema."
-        actionButton={<ModuleForm onSuccess={fetchModules} />}
+        title="Gestionar Roles"
+        description="Administra la información de los roles del sistema."
+        actionButton={<RoleForm onSuccess={fetchroles} permissions={permissions} modules={modules}/>}
       />
       <CardBox>
         <FilterBar
@@ -65,9 +69,6 @@ export default function ModulesList() {
                 <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center border-r-2 border-slate-300/70">
                   Descripción
                 </TableHead>
-                <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center border-r-2 border-slate-300/70">
-                  Clave
-                </TableHead>
                 <TableHead className="text-slate-600 font-semibold text-xs uppercase tracking-wider text-center">
                   Acciones
                 </TableHead>
@@ -76,38 +77,36 @@ export default function ModulesList() {
             <TableBody>
               {isLoading ? (
                 <TableSkeleton length={5} columns={5} />
-              ) : modules.length > 0 ? (
-                modules.map((module) => (
+              ) : roles.length > 0 ? (
+                roles.map((role) => (
                   <TableRow
-                    key={module.id}
+                    key={role.id}
                     className="hover:bg-white/60 transition-colors border-b border-slate-400/70"
                   >
                     <TableCell className="font-medium text-slate-500 text-center border-2 border-slate-300/70">
-                      #{module.id}
+                      #{role.id}
                     </TableCell>
-                    <TableCell className="text-slate-500 font-medium text-center border-2 border-slate-300/70">
-                      {module.name || "N/A"}
+                    <TableCell className="text-slate-500 font-medium text-center border-2 border-slate-300/70 truncate max-w-sm">
+                      {role.name || "N/A"}
                     </TableCell>
-                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
-                      {module.description || "N/A"}
-                    </TableCell>
-                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70">
-                      {module.key || "N/A"}
+                    <TableCell className="text-slate-500 text-center border-2 border-slate-300/70 truncate max-w-sm">
+                      {role.description || "N/A"}
                     </TableCell>
                     <TableCell className="text-center border-2 border-slate-300/70">
                       <div className="flex justify-center gap-2">
-                        <ModuleForm
-                          module={module}
-                          onSuccess={fetchModules}
+                        <RoleForm
+                          role={role}
+                          onSuccess={fetchroles}
                           trigger={
                             <Button
                               variant="default"
                               size="icon"
-                              //className="text-slate-500 hover:text-blue-600 bg-white shadow-sm border-slate-200 hover:border-blue-200 hover:bg-blue-50 transition-all"
                             >
                               <Pencil className="w-4 h-4" />
                             </Button>
                           }
+                          permissions={permissions}
+                          modules={modules}
                         />
                         <Button
                           variant="destructive"
@@ -115,7 +114,7 @@ export default function ModulesList() {
                           onClick={() =>
                             setConfirmModal({
                               isOpen: true,
-                              itemId: module.id,
+                              itemId: role.id,
                             })
                           }
                         >

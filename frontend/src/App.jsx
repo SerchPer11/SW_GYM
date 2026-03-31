@@ -12,6 +12,7 @@ const ClientsList = lazy(() => import("@/pages/Client/ClientsList"));
 const LoginForm = lazy(() => import("@/pages/Auth/LoginForm"));
 const ModulesList = lazy(() => import("@/pages/Security/Modules/ModulesList"));
 const PermissionList = lazy(() => import("@/pages/Security/Permissions/PermissionList"));
+const RolesList = lazy(() => import("@/pages/Security/Roles/RoleList"));
 
 function App() {
   const { user } = useAuth();
@@ -44,7 +45,8 @@ function App() {
                 </div>
               }
             />
-            // SECURITY ROUTES // Modules
+            // SECURITY ROUTES 
+            // Modules
             <Route
               element={<PermissionRoute requiredPermission="modules.index" />}
             >
@@ -58,6 +60,15 @@ function App() {
             >
               <Route path="security/permissions" element={<PermissionList />} />
             </Route>
+            // Roles
+            <Route
+              element={
+                <PermissionRoute requiredPermission="roles.index" />
+              }
+            >
+              <Route path="security/roles" element={<RolesList />} />
+            </Route>
+            
 
             // USER ROUTES
             <Route
