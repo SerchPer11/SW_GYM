@@ -8,7 +8,7 @@ const ProtectedRoute = lazy(() => import("@/components/Layout/ProtectedRoute"));
 const PermissionRoute = lazy(
   () => import("@/components/Layout/PermissionRoute"),
 );
-const ClientsList = lazy(() => import("@/pages/Client/ClientsList"));
+const ClientsList = lazy(() => import("@/pages/Users/Client/ClientsList"));
 const LoginForm = lazy(() => import("@/pages/Auth/LoginForm"));
 const ModulesList = lazy(() => import("@/pages/Security/Modules/ModulesList"));
 const PermissionList = lazy(() => import("@/pages/Security/Permissions/PermissionList"));
