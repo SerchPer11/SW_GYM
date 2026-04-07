@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Security\ModuleController;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
+use App\Http\Controllers\Users\PersonalController;
 
 //Api public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -26,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Users routes
     Route::prefix('users')->group(function () {
-        // Route::get('personal', [ClientController::class, 'personal']);
+        Route::get('personal', [PersonalController::class, 'personal']);
         Route::apiResource('clients', ClientController::class);
     });
     

@@ -3,17 +3,17 @@
 namespace App\Http\Services;
 
 use App\Models\Users\User;
-use App\Models\Users\Client;
+use App\Models\Users\Personal;
 use Illuminate\Support\Facades\DB;
 
-class ClientService
+class PersonalService
 {
     public function __construct()
     {
         //
     }
 
-    public function createClient($validated)
+    public function createPersonal($validated)
     {
         return DB::transaction(function () use ($validated) {
             $user = User::Create([
@@ -22,35 +22,36 @@ class ClientService
                 'email' => $validated['email'],
                 'phone' => $validated['phone'] ?? null,
                 'password' => bcrypt('12345678'),
-                'roles' => 4,
                 'gender' => $validated['gender'],
             ]);
-            return Client::create([
+            $user->syncRoles($validated['roles'] ?? []);
+            return Personal::create([
                 'user_id' => $user->id,
-                'inscription_date' => $validated['inscription_date'] ?? now()->toDateString(),
+                'hire_date' => $validated['hire_date'] ?? now()->toDateString(),
+                'termination_date' => $validated['termination_date'] ?? null,
                 'is_active' => $validated['is_active'] ?? true,
             ]);
         });
     }
 
-    public function updateClient($validated, $client)
+    public function updatePersonal($validated, $personal)
     {
-        return DB::transaction(function () use ($validated, $client) {
-            $client->user()->update([
+        return DB::transaction(function () use ($validated, $personal) {
+            $personal->user->update([
                 'name' => $validated['name'],
                 'lastname' => $validated['lastname'],
                 'email' => $validated['email'],
-                'phone' => $validated['phone'],
+                'phone' => $validated['phone'] ?? null,
                 'gender' => $validated['gender'],
             ]);
-
-            $client->update([
-                'inscription_date' => $validated['inscription_date'] ?? $client->inscription_date,
-                'expiration_date' => array_key_exists('expiration_date', $validated)
-                    ? $validated['expiration_date']
-                    : $client->expiration_date,
-                'is_active' => $validated['is_active'] ?? $client->is_active,
+            $personal->user->syncRoles($validated['roles'] ?? []);
+            $personal->update([
+                'is_active' => $validated['is_active'] ?? true,
+                'hire_date' => $validated['hire_date'] ?? now()->toDateString(),
+                'termination_date' => $validated['termination_date'] ?? null,
             ]);
+            return $personal;
         });
     }
+
 }

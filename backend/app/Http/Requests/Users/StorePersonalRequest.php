@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\StoreUserRequest;
 
-class StoreClientRequest extends FormRequest
+class StorePersonalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -25,8 +25,8 @@ class StoreClientRequest extends FormRequest
         $userRules = (new StoreUserRequest())->rules();
         $clientRules = [
             'user_id' => 'nullable|exists:users,id',
-            'inscription_date' => 'nullable|date',
-            'expiration_date' => 'nullable|date|after_or_equal:inscription_date',
+            'hire_date' => 'required|date',
+            'termination_date' => 'nullable|date|after_or_equal:hire_date',
             'is_active' => 'boolean',
         ];
 
@@ -37,13 +37,13 @@ class StoreClientRequest extends FormRequest
     {
         $userAttributes = (new StoreUserRequest())->attributes();
 
-        $clientAttributes = [
+        $personalAttributes = [
             'user_id' => 'ID de usuario',
-            'inscription_date' => 'Fecha de inscripción',
-            'expiration_date' => 'Fecha de vencimiento',
-            'is_active' => 'Estado activo',
+            'hire_date' => 'Fecha de contratación',
+            'termination_date' => 'Fecha de terminación',
+            'is_active' => 'Estado de actividad',
         ];
 
-        return array_merge($userAttributes, $clientAttributes);
+        return array_merge($userAttributes, $personalAttributes);
     }
 }

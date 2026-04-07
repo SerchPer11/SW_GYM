@@ -5,12 +5,11 @@ namespace App\Models\Users;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Users\User;
 
-class Client extends Model
+class Personal extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'clients';
+    protected $table = 'personals';
 
     /**
      * The attributes that are mass assignable.
@@ -19,8 +18,8 @@ class Client extends Model
      */
     protected $fillable = [
         'user_id',
-        'inscription_date',
-        'expiration_date',
+        'hire_date',
+        'termination_date',
         'is_active',
     ];
 
