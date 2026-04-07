@@ -23,6 +23,7 @@ class RoleAndUserSeeder extends Seeder
             'name' => 'Admin',
             'lastname' => 'General',
             'email' => 'admin@gmail.com',
+            'phone' => '1234567890',
             'password' => bcrypt('12345678'),
             'gender' => 'male',
             'email_verified_at' => now(),

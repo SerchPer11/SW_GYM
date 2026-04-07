@@ -26,6 +26,7 @@ class User extends Authenticatable
         'lastname',
         'gender',
         'email',
+        'phone',
         'password',
     ];
 
@@ -55,5 +56,10 @@ class User extends Authenticatable
     protected function clients()
     {
         return $this->hasMany(Client::class);
+    }
+
+    protected function personal()
+    {
+        return $this->hasMany(Personal::class);
     }
 }
